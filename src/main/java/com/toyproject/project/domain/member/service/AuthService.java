@@ -28,17 +28,17 @@ public class AuthService {
      * 회원가입
      */
     @Transactional
-    public void join(JoinRequest signupRequest) {
-        if(!memberRepository.findByEmail(signupRequest.getEmail()).isEmpty()){
+    public void join(JoinRequest joinRequest) {
+        if(!memberRepository.findByEmail(joinRequest.getEmail()).isEmpty()){
             throw new IllegalStateException("이미 존재하는 이메일입니다");
         }
 
         memberRepository.save(
                 Member.builder()
                 .uuid(UUID.randomUUID().toString())
-                .email(signupRequest.getEmail())
-                .password(signupRequest.getPassword())
-                .nickname(signupRequest.getNickname())
+                .email(joinRequest.getEmail())
+                .password(joinRequest.getPassword())
+                .nickname(joinRequest.getNickname())
                 .build()
         );
     }
