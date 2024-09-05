@@ -5,7 +5,7 @@ import com.toyproject.project.domain.member.dto.request.JoinRequest;
 import com.toyproject.project.domain.member.dto.request.TokenRequest;
 import com.toyproject.project.domain.member.dto.response.TokenResponse;
 import com.toyproject.project.domain.member.service.AuthService;
-import com.toyproject.project.jwt.JwtTokenProvider;
+import com.toyproject.project.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

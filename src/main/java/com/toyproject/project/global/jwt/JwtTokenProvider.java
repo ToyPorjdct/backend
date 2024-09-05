@@ -1,4 +1,4 @@
-package com.toyproject.project.jwt;
+package com.toyproject.project.global.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
