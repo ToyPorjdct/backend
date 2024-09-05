@@ -31,11 +31,8 @@ public class AuthService {
      */
     @Transactional
     public void join(JoinRequest joinRequest) {
-        if(!memberRepository.findByEmail(joinRequest.getEmail()).isEmpty()){
-            throw new IllegalStateException("이미 존재하는 이메일입니다");
-        }
-
-        String encodedPassword = passwordEncoder.encode(joinRequest.getPassword());
+        duplicateEmail(joinRequest);
+        String encodedPassword = passwordEncode(joinRequest);
 
         memberRepository.save(
                 Member.builder()
@@ -45,6 +42,16 @@ public class AuthService {
                 .nickname(joinRequest.getNickname())
                 .build()
         );
+    }
+
+    private String passwordEncode(JoinRequest joinRequest) {
+        return passwordEncoder.encode(joinRequest.getPassword());
+    }
+
+    private void duplicateEmail(JoinRequest joinRequest) {
+        if(!memberRepository.findByEmail(joinRequest.getEmail()).isEmpty()){
+            throw new IllegalStateException("이미 존재하는 이메일입니다");
+        }
     }
 
 
@@ -59,10 +66,12 @@ public class AuthService {
             throw new IllegalStateException("아아디 또는 비밀번호가 일치하지 않습니다");
         }
 
-        String token = jwtTokenProvider.createToken(member.getUuid());
-
         return TokenResponse.builder()
-                .token(token)
+                .token(createToken(member))
                 .build();
+    }
+
+    private String createToken(Member member) {
+        return "Bearer " + jwtTokenProvider.createToken(member.getUuid());
     }
 }

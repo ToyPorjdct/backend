@@ -4,10 +4,14 @@ import com.toyproject.project.domain.member.dto.request.LoginRequest;
 import com.toyproject.project.domain.member.dto.request.JoinRequest;
 import com.toyproject.project.domain.member.dto.request.TokenRequest;
 import com.toyproject.project.domain.member.dto.response.TokenResponse;
+import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.service.AuthService;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +33,4 @@ public class AuthController {
     }
 
 
-    @GetMapping("/token")
-    public String token(@RequestBody TokenRequest tokenRequest) {
-        return jwtTokenProvider.getUuid(tokenRequest.getToken());
-    }
 }

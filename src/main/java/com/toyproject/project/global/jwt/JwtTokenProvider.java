@@ -56,4 +56,16 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+
+    public boolean isExpired(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration()
+                .before(new Date());
+    }
+
+
 }
