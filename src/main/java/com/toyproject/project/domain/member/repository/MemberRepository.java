@@ -8,9 +8,12 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByEmailAndPassword(String email, String password);
-
     Optional<Member> findByEmail(String email);
 
     Optional<Member> findByUuid(String uuid);
+
+    default Member findByUuidOrElseThrow(String uuid){
+        return findByUuid(uuid).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+    }
+
 }

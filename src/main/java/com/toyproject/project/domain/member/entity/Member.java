@@ -31,5 +31,8 @@ public class Member {
 
     private boolean status;
 
+    private String role;
+
+
 
 }

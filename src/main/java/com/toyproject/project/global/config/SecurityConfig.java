@@ -1,12 +1,16 @@
 package com.toyproject.project.global.config;
 
 
-import com.toyproject.project.domain.member.service.MemberService;
-import com.toyproject.project.global.jwt.JwtFilter;
+
+import com.toyproject.project.domain.member.repository.MemberRepository;
+import com.toyproject.project.global.jwt.JWTFilter;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
+import com.toyproject.project.global.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,13 +19,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -29,12 +44,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable());
 
-        // 권한 관리
         http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth/*").permitAll()
-                        .requestMatchers("/admin/*").hasRole("ADMIN")
-                        .anyRequest().authenticated());
+                .formLogin(form -> form.disable());
+
+        http
+                .httpBasic((auth) -> auth.disable());
 
         http
                 .sessionManagement((session) -> session
@@ -42,16 +56,21 @@ public class SecurityConfig {
 
         // 필터 관리
         http
-                .addFilterBefore(new JwtFilter(jwtTokenProvider, memberService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtTokenProvider, memberRepository), LoginFilter.class);
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
+
+        // 인가 관리
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/*","/auth/*").permitAll()
+                        .requestMatchers("/admin/*").hasRole("ADMIN")
+                        .anyRequest().authenticated());
 
 
         return http.build();
 
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 }
