@@ -25,11 +25,5 @@ public class MemberController {
         return memberService.getMemberInfo(member);
     }
 
-//    @GetMapping("/my-info")
-//    public MyPageResponse myInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
-//        Member member = userDetails.getMember();
-//        return memberService.getMemberInfo(member);
-//    }
-
 
 }
