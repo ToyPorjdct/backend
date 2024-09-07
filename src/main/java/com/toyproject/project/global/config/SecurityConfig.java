@@ -42,12 +42,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
         http
-                .csrf(csrf -> csrf.disable());
-
-        http
-                .formLogin(form -> form.disable());
-
-        http
+                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())
                 .httpBasic((auth) -> auth.disable());
 
         http
@@ -55,16 +51,20 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // 필터 관리
+
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtTokenProvider);
+        loginFilter.setFilterProcessesUrl("/auth/login");
+
         http
-                .addFilterBefore(new JWTFilter(jwtTokenProvider, memberRepository), LoginFilter.class);
-        http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtTokenProvider, memberRepository), LoginFilter.class)
+                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         // 인가 관리
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/*","/auth/*").permitAll()
+                        .requestMatchers("/auth/*").permitAll()
+                        .requestMatchers("/member/*").hasRole("USER")
                         .requestMatchers("/admin/*").hasRole("ADMIN")
                         .anyRequest().authenticated());
 

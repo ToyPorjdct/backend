@@ -3,6 +3,7 @@ package com.toyproject.project.domain.member.service;
 import com.toyproject.project.domain.member.dto.request.JoinRequest;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
+import com.toyproject.project.global.exception.CustomException;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.toyproject.project.global.exception.ErrorCode.ALREADY_EXIST_MEMBER;
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -71,7 +73,8 @@ class AuthServiceTest {
 
         // then
         assertThatThrownBy(() -> authService.join(joinRequest2))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("ErrorCode", ALREADY_EXIST_MEMBER);
     }
 
 }

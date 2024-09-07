@@ -1,7 +1,7 @@
 package com.toyproject.project.domain.member.controller;
 
 
-import com.toyproject.project.domain.member.dto.response.MyPageResponse;
+import com.toyproject.project.domain.member.dto.response.MyInfoResponse;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.service.MemberService;
 import com.toyproject.project.global.jwt.AuthenticationMember;
@@ -23,7 +23,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/my-info")
-    public ResponseEntity<ApiResponse<MyPageResponse>> myInfo(@AuthenticationMember Member member) {
+    public ResponseEntity<ApiResponse<MyInfoResponse>> myInfo(@AuthenticationMember Member member) {
         return ApiResponse.success(memberService.getMemberInfo(member), "회원정보 조회 성공");
     }
 

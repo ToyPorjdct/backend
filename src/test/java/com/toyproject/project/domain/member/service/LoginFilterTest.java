@@ -46,7 +46,7 @@ public class LoginFilterTest {
     @Test
     @DisplayName("로그인 성공")
     public void login() throws Exception {
-        mockMvc.perform(post("/login")
+        mockMvc.perform(post("/auth/login")
                         .param("username", "test@test.com")
                         .param("password", "1234"))
                 .andExpect(status().isCreated())
@@ -57,7 +57,7 @@ public class LoginFilterTest {
     @DisplayName("로그인 실패 : 비밀번호 틀림")
     public void loginFail() throws Exception {
         // then
-        mockMvc.perform(post("/login")
+        mockMvc.perform(post("/auth/login")
                         .param("username", "test@test.com")
                         .param("password", "12345"))
                 .andExpect(status().isUnauthorized()); // 401 상태 코드 확인
@@ -68,7 +68,7 @@ public class LoginFilterTest {
     @DisplayName("로그인 실패 : 아이디 틀림")
     public void loginFail2() throws Exception {
         // then
-        mockMvc.perform(post("/login")
+        mockMvc.perform(post("/auth/login")
                         .param("username", "test2@test.com")
                         .param("password", "1234"))
                 .andExpect(status().isUnauthorized()); // 401 상태 코드 확인

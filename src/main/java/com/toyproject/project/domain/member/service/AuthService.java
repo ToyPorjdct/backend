@@ -4,6 +4,7 @@ package com.toyproject.project.domain.member.service;
 import com.toyproject.project.domain.member.dto.request.JoinRequest;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
+import com.toyproject.project.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import static com.toyproject.project.global.exception.ErrorCode.ALREADY_EXIST_MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +48,7 @@ public class AuthService {
 
     private void duplicateEmail(JoinRequest joinRequest) {
         if(!memberRepository.findByEmail(joinRequest.getEmail()).isEmpty()){
-            throw new IllegalStateException("이미 존재하는 이메일입니다");
+            throw new CustomException(ALREADY_EXIST_MEMBER);
         }
     }
 
