@@ -20,10 +20,16 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/my-page")
-    public MyPageResponse myPage(@AuthenticationMember Member member) {
-        return memberService.getMyPage(member);
+    @GetMapping("/my-info")
+    public MyPageResponse myInfo(@AuthenticationMember Member member) {
+        return memberService.getMemberInfo(member);
     }
+
+//    @GetMapping("/my-info")
+//    public MyPageResponse myInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+//        Member member = userDetails.getMember();
+//        return memberService.getMemberInfo(member);
+//    }
 
 
 }

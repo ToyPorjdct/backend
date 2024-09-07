@@ -16,4 +16,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         return findByUuid(uuid).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
     }
 
+    default Member findByEmailOrElseThrow(String email){
+        return findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+    }
+
 }

@@ -21,7 +21,7 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다"));
     }
 
-    public MyPageResponse getMyPage(Member member){
+    public MyPageResponse getMemberInfo(Member member){
         return MyPageResponse.builder()
                 .nickname(member.getNickname())
                 .email(member.getEmail())
