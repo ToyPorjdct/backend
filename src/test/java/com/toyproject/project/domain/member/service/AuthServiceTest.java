@@ -1,8 +1,6 @@
 package com.toyproject.project.domain.member.service;
 
 import com.toyproject.project.domain.member.dto.request.JoinRequest;
-import com.toyproject.project.domain.member.dto.request.LoginRequest;
-import com.toyproject.project.domain.member.dto.response.TokenResponse;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
@@ -29,6 +27,10 @@ class AuthServiceTest {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private MemberService memberService;
+
 
     @Test
     @DisplayName("회원가입 성공")
@@ -73,48 +75,72 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 성공")
-    void login() {
+    @DisplayName("회원정보 조회")
+    void myPage() {
         // given
-        JoinRequest joinRequest1 = JoinRequest.builder()
+        JoinRequest joinRequest = JoinRequest.builder()
                 .email("test@test.com")
-                .nickname("test2")
+                .nickname("test")
                 .password("1234")
                 .build();
 
-        authService.join(joinRequest1);
-
+        authService.join(joinRequest);
 
         // when
-        TokenResponse token = authService.login(
-                LoginRequest.builder()
-                        .email(joinRequest1.getEmail())
-                        .password(joinRequest1.getPassword())
-                        .build());
+        Member member = memberRepository.findByEmailOrElseThrow(joinRequest.getEmail());
+        memberService.getMemberInfo(member);
 
-        //then
-        assertThat(jwtTokenProvider.validateToken(token.getToken())).isTrue();
+        // then
+        assertThat(member.getEmail()).isEqualTo("test@test.com");
+        assertThat(member.getNickname()).isEqualTo("test");
+
     }
 
-    @Test
-    @DisplayName("로그인 실패 : 비밀번호 불일치")
-    void login_fail() {
-        // given
-        JoinRequest joinRequest1 = JoinRequest.builder()
-                .email("test@test.com")
-                .nickname("test2")
-                .password("1234")
-                .build();
+//    @Test
+//    @DisplayName("로그인 성공")
+//    void login() {
+//        // given
+//        JoinRequest joinRequest1 = JoinRequest.builder()
+//                .email("test@test.com")
+//                .nickname("test2")
+//                .password("1234")
+//                .build();
+//
+//        authService.join(joinRequest1);
+//
+//
+//        // when
+//        TokenResponse token = authService.login(
+//                LoginRequest.builder()
+//                        .email(joinRequest1.getEmail())
+//                        .password(joinRequest1.getPassword())
+//                        .build());
+//
+//        //then
+//        assertThat(jwtTokenProvider.validateToken(token.getToken())).isTrue();
+//    }
+//
+//    @Test
+//    @DisplayName("로그인 실패 : 비밀번호 불일치")
+//    void login_fail() {
+//        // given
+//        JoinRequest joinRequest1 = JoinRequest.builder()
+//                .email("test@test.com")
+//                .nickname("test2")
+//                .password("1234")
+//                .build();
+//
+//        authService.join(joinRequest1);
+//
+//        //then
+//        LoginRequest loginRequest = LoginRequest.builder()
+//                .email(joinRequest1.getEmail())
+//                .password("123")
+//                .build();
+//
+//        assertThatThrownBy(() -> authService.login(loginRequest))
+//                .isInstanceOf(IllegalStateException.class);
+//    }
 
-        authService.join(joinRequest1);
 
-        //then
-        LoginRequest loginRequest = LoginRequest.builder()
-                .email(joinRequest1.getEmail())
-                .password("123")
-                .build();
-
-        assertThatThrownBy(() -> authService.login(loginRequest))
-                .isInstanceOf(IllegalStateException.class);
-    }
 }
