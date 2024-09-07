@@ -2,7 +2,9 @@ package com.toyproject.project.domain.member.controller;
 
 import com.toyproject.project.domain.member.dto.request.JoinRequest;
 import com.toyproject.project.domain.member.service.AuthService;
+import com.toyproject.project.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -14,9 +16,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/join")
-    public String join(@RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<ApiResponse<String>> join(@RequestBody JoinRequest joinRequest) {
         authService.join(joinRequest);
-        return "회원가입 성공";
+        return ApiResponse.success(null, "회원 가입 성공");
     }
 
 

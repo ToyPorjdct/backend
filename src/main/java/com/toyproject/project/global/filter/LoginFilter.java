@@ -1,6 +1,8 @@
-package com.toyproject.project.global.jwt;
+package com.toyproject.project.global.filter;
 
 
+import com.toyproject.project.global.jwt.CustomUserDetails;
+import com.toyproject.project.global.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,7 +44,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = jwtTokenProvider.createToken(uuid);
 
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("Authorization", token);
+        response.setStatus(201);
 
     }
 

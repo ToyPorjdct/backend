@@ -3,9 +3,9 @@ package com.toyproject.project.global.config;
 
 
 import com.toyproject.project.domain.member.repository.MemberRepository;
-import com.toyproject.project.global.jwt.JWTFilter;
+import com.toyproject.project.global.filter.JWTFilter;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
-import com.toyproject.project.global.jwt.LoginFilter;
+import com.toyproject.project.global.filter.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

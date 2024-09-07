@@ -49,7 +49,7 @@ public class LoginFilterTest {
         mockMvc.perform(post("/login")
                         .param("username", "test@test.com")
                         .param("password", "1234"))
-                .andExpect(status().isOk()) // 200 상태 코드 확인
+                .andExpect(status().isCreated())
                 .andExpect(header().exists("Authorization")); // Authorization 헤더가 있는지 확인
     }
 
