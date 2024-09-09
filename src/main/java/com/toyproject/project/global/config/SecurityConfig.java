@@ -4,6 +4,8 @@ package com.toyproject.project.global.config;
 
 import com.toyproject.project.domain.member.repository.MemberRepository;
 import com.toyproject.project.global.filter.JWTFilter;
+import com.toyproject.project.global.jwt.CustomAccessDeniedHandler;
+import com.toyproject.project.global.jwt.CustomAuthenticationEntryPoint;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import com.toyproject.project.global.filter.LoginFilter;
 import lombok.RequiredArgsConstructor;
@@ -50,14 +52,20 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // 필터 관리
+        // 예외 처리
+        http.exceptionHandling(e -> e
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .accessDeniedHandler(new CustomAccessDeniedHandler()));
 
+        // 필터 관리
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtTokenProvider);
         loginFilter.setFilterProcessesUrl("/auth/login");
 
         http
                 .addFilterBefore(new JWTFilter(jwtTokenProvider, memberRepository), LoginFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+
+
 
 
         // 인가 관리
