@@ -21,7 +21,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
 
         ApiResponse<Object> errorResponse = new ApiResponse<>(
-                401,
+                403,
                 null,
                 "접근 권한이 없습니다."
         );
@@ -31,7 +31,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         String jsonErrorResponse = objectMapper.writeValueAsString(errorResponse);
 
         // JSON 형태로 응답 처리
-        response.setStatus(401);
+        response.setStatus(403);
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(jsonErrorResponse);

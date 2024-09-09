@@ -56,7 +56,6 @@ public class LoginFilterTest {
     @Test
     @DisplayName("로그인 실패 : 비밀번호 틀림")
     public void loginFail() throws Exception {
-        // then
         mockMvc.perform(post("/auth/login")
                         .param("username", "test@test.com")
                         .param("password", "12345"))
@@ -67,12 +66,20 @@ public class LoginFilterTest {
     @Test
     @DisplayName("로그인 실패 : 아이디 틀림")
     public void loginFail2() throws Exception {
-        // then
         mockMvc.perform(post("/auth/login")
                         .param("username", "test2@test.com")
                         .param("password", "1234"))
                 .andExpect(status().isUnauthorized()); // 401 상태 코드 확인
 
     }
+
+    @Test
+    @DisplayName("비로그인 상태에서 회원서비스 접근")
+    public void accessDenied() throws Exception {
+        mockMvc.perform(post("/member/my-info"))
+                .andExpect(status().isUnauthorized()); // 401 상태 코드 확인
+    }
+
+
 
 }
