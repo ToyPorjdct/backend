@@ -1,4 +1,4 @@
-package com.toyproject.project.global.jwt;
+package com.toyproject.project.global.filter.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toyproject.project.global.response.ApiResponse;
