@@ -25,6 +25,8 @@ public class MemberService {
         return MyInfoResponse.builder()
                 .nickname(member.getNickname())
                 .email(member.getEmail())
+                .createdAt(member.getCreatedAt())
+                .updatedAt(member.getUpdatedAt())
                 .role(member.getRole())
                 .build();
     }
