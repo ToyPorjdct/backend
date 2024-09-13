@@ -1,7 +1,7 @@
 package com.toyproject.project.global.filter;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toyproject.project.global.jwt.CustomUserDetails;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,9 +47,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("로그인 성공");
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        String uuid = customUserDetails.getMember().getUuid();
+        Long userId = customUserDetails.getMember().getId();
 
-        String token = jwtTokenProvider.createToken(uuid);
+        String token = jwtTokenProvider.createToken(userId);
 
         response.addHeader("Authorization", token);
 

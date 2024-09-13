@@ -33,7 +33,6 @@ public class AuthService {
 
         memberRepository.save(
                 Member.builder()
-                .uuid(UUID.randomUUID().toString())
                 .email(joinRequest.getEmail())
                 .password(passwordEncode(joinRequest))
                 .nickname(joinRequest.getNickname())

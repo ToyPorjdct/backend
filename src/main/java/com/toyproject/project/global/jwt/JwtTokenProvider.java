@@ -18,11 +18,11 @@ public class JwtTokenProvider {
 
     /**
      * 토큰 생성
-     * @param uuid 사용자 uuid
+     * @param memberId 사용자 식별 번호
      * @return 토큰
      */
-    public String createToken(String uuid) {
-        Claims claims = Jwts.claims().setSubject(uuid); // 토큰에 들어갈 정보
+    public String createToken(Long memberId) {
+        Claims claims = Jwts.claims().setSubject(memberId.toString()); // 토큰에 들어갈 정보
         Date now = new Date();
         Date validity = new Date(now.getTime() + EXPIRATION_TIME);
         return Jwts.builder()
@@ -38,8 +38,8 @@ public class JwtTokenProvider {
      * @param token 토큰
      * @return uuid
      */
-    public String getUuid(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
+    public Long getMemberId(String token) {
+        return Long.parseLong(Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject());
     }
 
 

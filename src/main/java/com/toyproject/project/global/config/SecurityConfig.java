@@ -4,8 +4,8 @@ package com.toyproject.project.global.config;
 
 import com.toyproject.project.domain.member.repository.MemberRepository;
 import com.toyproject.project.global.filter.JWTFilter;
-import com.toyproject.project.global.jwt.CustomAccessDeniedHandler;
-import com.toyproject.project.global.jwt.CustomAuthenticationEntryPointHandler;
+import com.toyproject.project.global.filter.exception.CustomAccessDeniedHandler;
+import com.toyproject.project.global.filter.exception.CustomAuthenticationEntryPointHandler;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import com.toyproject.project.global.filter.LoginFilter;
 import lombok.RequiredArgsConstructor;
