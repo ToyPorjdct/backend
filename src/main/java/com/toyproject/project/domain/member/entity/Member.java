@@ -27,9 +27,17 @@ public class Member extends BaseEntity {
     @Column(length = 255, nullable = false)
     private String password;
 
+    @Column(length = 255)
+    private String socialCode;
+
     private boolean status;
 
     private String role;
+
+
+    public void updateSocialCode(String socialCode) {
+        this.socialCode = socialCode;
+    }
 
 
 
