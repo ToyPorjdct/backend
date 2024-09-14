@@ -48,7 +48,7 @@ public class JWTFilter extends OncePerRequestFilter { // OncePerRequestFilter ëŠ
             }
 
 
-            Long memberId = jwtTokenProvider.getMemberId(token);
+            Long memberId = Long.parseLong(jwtTokenProvider.getMemberId(token));
 
             Member member = memberRepository.findByIdOrElseThrow(memberId);
 

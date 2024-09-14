@@ -38,8 +38,8 @@ public class JwtTokenProvider {
      * @param token 토큰
      * @return uuid
      */
-    public Long getMemberId(String token) {
-        return Long.parseLong(Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject());
+    public String getMemberId(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
     }
 
 
