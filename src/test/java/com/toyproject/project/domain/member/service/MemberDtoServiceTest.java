@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-public class MemberServiceTest {
+public class MemberDtoServiceTest {
 
     @Autowired
     private MemberService memberService;

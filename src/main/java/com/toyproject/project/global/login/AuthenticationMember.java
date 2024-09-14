@@ -1,4 +1,4 @@
-package com.toyproject.project.global.jwt;
+package com.toyproject.project.global.login;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

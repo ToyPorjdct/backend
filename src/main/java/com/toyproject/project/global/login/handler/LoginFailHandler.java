@@ -1,4 +1,4 @@
-package com.toyproject.project.global.jwt;
+package com.toyproject.project.global.login.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

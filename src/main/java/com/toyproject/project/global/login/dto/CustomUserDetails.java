@@ -1,4 +1,4 @@
-package com.toyproject.project.global.jwt;
+package com.toyproject.project.global.login.dto;
 
 import com.toyproject.project.domain.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;

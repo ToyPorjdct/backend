@@ -1,9 +1,9 @@
-package com.toyproject.project.global.filter;
+package com.toyproject.project.global.login.filter;
 
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toyproject.project.global.jwt.CustomUserDetails;
+import com.toyproject.project.global.login.dto.CustomUserDetails;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import com.toyproject.project.global.response.ApiResponse;
 import jakarta.servlet.FilterChain;

@@ -1,8 +1,8 @@
-package com.toyproject.project.domain.member.service;
+package com.toyproject.project.global.login.service;
 
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
-import com.toyproject.project.global.jwt.CustomUserDetails;
+import com.toyproject.project.global.login.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -19,4 +19,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         return findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
     }
 
+    Optional<Member> findByEmailAndSocialCode(String email, String socialCode);
 }
