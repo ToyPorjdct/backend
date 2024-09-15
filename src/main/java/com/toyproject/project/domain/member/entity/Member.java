@@ -32,7 +32,8 @@ public class Member extends BaseEntity {
 
     private boolean status;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
 
 
     public void updateSocialCode(String socialCode) {

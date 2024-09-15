@@ -2,6 +2,7 @@ package com.toyproject.project.domain.member.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.toyproject.project.domain.member.entity.MemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class MyInfoResponse {
 
     private String nickname;
     private String email;
-    private String role;
+    private MemberRole role;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

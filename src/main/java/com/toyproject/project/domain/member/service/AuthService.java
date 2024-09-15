@@ -3,6 +3,7 @@ package com.toyproject.project.domain.member.service;
 
 import com.toyproject.project.domain.member.dto.request.JoinRequest;
 import com.toyproject.project.domain.member.entity.Member;
+import com.toyproject.project.domain.member.entity.MemberRole;
 import com.toyproject.project.domain.member.repository.MemberRepository;
 import com.toyproject.project.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class AuthService {
                 .email(joinRequest.getEmail())
                 .password(passwordEncode(joinRequest))
                 .nickname(joinRequest.getNickname())
-                .role("ROLE_USER")
+                .role(MemberRole.USER)
                 .build()
         );
     }

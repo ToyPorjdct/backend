@@ -24,7 +24,7 @@ public class MemberController {
 
     @GetMapping("/my-info")
     public ResponseEntity<ApiResponse<MyInfoResponse>> myInfo(@AuthenticationMember Member member) {
-        return ApiResponse.success(memberService.getMemberInfo(member), "회원정보 조회 성공");
+        return ApiResponse.success(memberService.getMemberInfo(member), "내정보 조회 성공");
     }
 
 

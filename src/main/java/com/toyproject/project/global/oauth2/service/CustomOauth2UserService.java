@@ -1,5 +1,6 @@
 package com.toyproject.project.global.oauth2.service;
 
+import com.toyproject.project.domain.member.entity.MemberRole;
 import com.toyproject.project.global.oauth2.dto.CustomOAuth2User;
 import com.toyproject.project.global.oauth2.dto.KakaoResponse;
 import com.toyproject.project.global.oauth2.dto.OAuth2Response;
@@ -66,7 +67,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                         .nickname(oauth2Response.getName())
                         .password(UUID.randomUUID().toString())
                         .socialCode(socialCode)
-                        .role("ROLE_USER")
+                        .role(MemberRole.USER)
                         .build()
         );
         return savedMember;
