@@ -30,24 +30,24 @@ public class AuthService {
      */
     @Transactional
     public void join(JoinRequest joinRequest) {
-        duplicateEmail(joinRequest);
+        duplicateEmail(joinRequest.getEmail());
 
         memberRepository.save(
                 Member.builder()
                 .email(joinRequest.getEmail())
-                .password(passwordEncode(joinRequest))
+                .password(passwordEncode(joinRequest.getPassword()))
                 .nickname(joinRequest.getNickname())
                 .role(MemberRole.USER)
                 .build()
         );
     }
 
-    private String passwordEncode(JoinRequest joinRequest) {
-        return passwordEncoder.encode(joinRequest.getPassword());
+    private String passwordEncode(String password) {
+        return passwordEncoder.encode(password);
     }
 
-    private void duplicateEmail(JoinRequest joinRequest) {
-        if(!memberRepository.findByEmail(joinRequest.getEmail()).isEmpty()){
+    private void duplicateEmail(String email) {
+        if(!memberRepository.findByEmail(email).isEmpty()){
             throw new CustomException(ALREADY_EXIST_MEMBER);
         }
     }
