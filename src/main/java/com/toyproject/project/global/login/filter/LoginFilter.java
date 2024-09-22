@@ -3,6 +3,7 @@ package com.toyproject.project.global.login.filter;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toyproject.project.domain.member.dto.request.LoginRequest;
 import com.toyproject.project.global.login.dto.CustomUserDetails;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import com.toyproject.project.global.response.ApiResponse;
@@ -32,14 +33,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("loginFilter");
 
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        LoginRequest loginRequest = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            loginRequest = mapper.readValue(request.getInputStream(), LoginRequest.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                username, password, null);
+                loginRequest.getEmail(), loginRequest.getPassword(), null);
 
         return authenticationManager.authenticate(authToken);
-
     }
 
     @Override
