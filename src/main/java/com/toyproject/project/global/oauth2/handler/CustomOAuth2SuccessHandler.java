@@ -38,7 +38,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
     private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString("http://localhost:8080/oauth2/redirect")
+        return UriComponentsBuilder.fromUriString("http://localhost:3000")
                 .queryParam("token", token)
                 .build().toUriString();
     }
