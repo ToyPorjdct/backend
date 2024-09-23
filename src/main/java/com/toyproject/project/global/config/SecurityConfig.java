@@ -75,7 +75,8 @@ public class SecurityConfig {
         // 인가 관리
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**",
+                                "/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/member/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
