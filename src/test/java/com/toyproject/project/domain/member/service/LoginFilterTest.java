@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,9 +47,11 @@ public class LoginFilterTest {
     @Test
     @DisplayName("로그인 성공")
     public void login() throws Exception {
+        String jsonRequest = "{ \"email\": \"test@test.com\", \"password\": \"1234\" }";
+
         mockMvc.perform(post("/auth/login")
-                        .param("username", "test@test.com")
-                        .param("password", "1234"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Authorization")); // Authorization 헤더가 있는지 확인
     }
@@ -56,9 +59,11 @@ public class LoginFilterTest {
     @Test
     @DisplayName("로그인 실패 : 비밀번호 틀림")
     public void loginFail() throws Exception {
+        String jsonRequest = "{ \"email\": \"test@test.com\", \"password\": \"12345\" }";
+
         mockMvc.perform(post("/auth/login")
-                        .param("username", "test@test.com")
-                        .param("password", "12345"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
                 .andExpect(status().isUnauthorized()); // 401 상태 코드 확인
 
     }
@@ -66,9 +71,11 @@ public class LoginFilterTest {
     @Test
     @DisplayName("로그인 실패 : 아이디 틀림")
     public void loginFail2() throws Exception {
+        String jsonRequest = "{ \"email\": \"test2@test.com\", \"password\": \"1234\" }";
+
         mockMvc.perform(post("/auth/login")
-                        .param("username", "test2@test.com")
-                        .param("password", "1234"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
                 .andExpect(status().isUnauthorized()); // 401 상태 코드 확인
 
     }
