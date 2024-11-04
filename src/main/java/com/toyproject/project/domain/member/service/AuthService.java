@@ -29,17 +29,20 @@ public class AuthService {
      * 회원가입
      */
     @Transactional
-    public void join(JoinRequest joinRequest) {
+    public Long join(JoinRequest joinRequest) {
         duplicateEmail(joinRequest.getEmail());
 
-        memberRepository.save(
+        Member member = memberRepository.save(
                 Member.builder()
-                .email(joinRequest.getEmail())
-                .password(passwordEncode(joinRequest.getPassword()))
-                .nickname(joinRequest.getNickname())
-                .role(MemberRole.USER)
-                .build()
+                        .email(joinRequest.getEmail())
+                        .password(passwordEncode(joinRequest.getPassword()))
+                        .nickname(joinRequest.getNickname())
+                        .role(MemberRole.USER)
+                        .build()
+
         );
+
+        return member.getId();
     }
 
     private String passwordEncode(String password) {
