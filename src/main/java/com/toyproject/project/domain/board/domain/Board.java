@@ -2,6 +2,7 @@ package com.toyproject.project.domain.board.domain;
 
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.global.entity.BaseEntity;
+import com.toyproject.project.global.exception.CustomException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
+import static com.toyproject.project.global.exception.ErrorCode.EXCEED_MAX_PARTICIPANT;
 
 @Getter
 @NoArgsConstructor
@@ -32,5 +35,12 @@ public class Board extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    public void increaseCurrentParticipant() {
+        if (currentParticipant >= maxParticipant) {
+            throw new CustomException(EXCEED_MAX_PARTICIPANT);
+        }
+        currentParticipant++;
+    }
 
 }

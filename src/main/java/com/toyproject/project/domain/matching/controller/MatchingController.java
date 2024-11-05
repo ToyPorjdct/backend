@@ -1,7 +1,6 @@
 package com.toyproject.project.domain.matching.controller;
 
 
-import com.toyproject.project.domain.matching.dto.MatchingResponseDto;
 import com.toyproject.project.domain.matching.service.MatchingService;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.global.login.AuthenticationMember;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,7 +37,7 @@ public class MatchingController {
     public ResponseEntity<ApiResponse<String>> matchingAccept(
             @PathVariable Long matchingId,
             @AuthenticationMember Member member) {
-        matchingService.acceptMatching(matchingId, member);
+        matchingService.acceptMatching(matchingId);
         return ApiResponse.success(null, "참가 신청을 수락하였습니다.");
     }
 
@@ -48,7 +46,7 @@ public class MatchingController {
     public ResponseEntity<ApiResponse<String>> matchingReject(
             @PathVariable Long matchingId,
             @AuthenticationMember Member member) {
-        matchingService.rejectMatching(matchingId, member);
+        matchingService.rejectMatching(matchingId);
         return ApiResponse.success(null, "참가 신청을 거절하였습니다.");
     }
 

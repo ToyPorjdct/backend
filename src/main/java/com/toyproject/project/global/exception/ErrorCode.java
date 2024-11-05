@@ -11,6 +11,7 @@ public enum ErrorCode {
     INVALID_REQUEST_METHOD(400, "요청 메서드가 유효하지 않습니다"),
     TYPE_MISMATCH(400, "요청 데이터 중 유효하지 않은 타입이 있습니다."),
     AUTHOR_CANNOT_APPLY(400, "글쓴이는 신청할 수 없습니다."),
+    EXCEED_MAX_PARTICIPANT(400, "참가자가 초과되었습니다."),
 
 
     // 401 : 접근 권한이 없음
