@@ -43,5 +43,14 @@ public class MatchingController {
         return ApiResponse.success(null, "참가 신청을 수락하였습니다.");
     }
 
+    @PutMapping("/{matchingId}/reject")
+    @Operation(summary = "매칭 신청 거절", description = "매칭 신청 거절")
+    public ResponseEntity<ApiResponse<String>> matchingReject(
+            @PathVariable Long matchingId,
+            @AuthenticationMember Member member) {
+        matchingService.rejectMatching(matchingId, member);
+        return ApiResponse.success(null, "참가 신청을 거절하였습니다.");
+    }
+
 
 }
