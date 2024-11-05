@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.toyproject.project.domain.matching.domain.status.MatchingStatus.APPROVED;
 import static com.toyproject.project.domain.matching.domain.status.MatchingStatus.PENDING;
 import static com.toyproject.project.global.exception.ErrorCode.NOT_FOUND_BOARD;
 import static com.toyproject.project.global.exception.ErrorCode.NO_AUTHORITY;
@@ -76,7 +77,18 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 현재 모집글 참가자 조회
+     */
+    public List<MatchingResponseDto> getCurrentParticipant(Long boardId) {
+        List<Matching> matchingList = matchingRepository.findByBoardIdAndStatus(boardId, APPROVED);
+        return matchingList.stream()
+                .map(MatchingResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
     private static boolean isAuthor(Member member, Board board) {
         return board.getMember() == member;
     }
+
 }

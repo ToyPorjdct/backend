@@ -50,5 +50,12 @@ public class BoardController {
         return ApiResponse.success(boardService.getMatchingList(boardId, member), "신청자 조회 성공");
     }
 
+    @GetMapping("/{boardId}/participant")
+    @Operation(summary = "현재 참가자 조회", description = "현재 참가자 조회")
+    public ResponseEntity<ApiResponse<List<MatchingResponseDto>>> participantList(
+            @PathVariable Long boardId
+    ) {
+        return ApiResponse.success(boardService.getCurrentParticipant(boardId), "참가자 조회 성공");
+    }
 
 }

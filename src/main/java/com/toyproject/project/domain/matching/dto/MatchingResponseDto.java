@@ -8,14 +8,15 @@ import lombok.Getter;
 @Builder
 public class MatchingResponseDto {
     private Long matchingId;
-    private String nickname;
     private Long memberId;
+    private String nickname;
+
 
     public static MatchingResponseDto from(Matching matching) {
         return new MatchingResponseDto(
                 matching.getId(),
-                matching.getMember().getNickname(),
-                matching.getMember().getId()
+                matching.getMember().getId(),
+                matching.getMember().getNickname()
         );
     }
 }
