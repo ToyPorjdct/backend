@@ -4,6 +4,9 @@ import com.toyproject.project.domain.board.domain.Board;
 import com.toyproject.project.domain.board.dto.BoardCreateRequestDto;
 import com.toyproject.project.domain.board.dto.BoardDetailResponseDto;
 import com.toyproject.project.domain.board.repository.BoardRepository;
+import com.toyproject.project.domain.matching.domain.Matching;
+import com.toyproject.project.domain.matching.dto.MatchingResponseDto;
+import com.toyproject.project.domain.matching.repository.MatchingRepository;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.toyproject.project.domain.matching.domain.status.MatchingStatus.PENDING;
 import static com.toyproject.project.global.exception.ErrorCode.NOT_FOUND_BOARD;
+import static com.toyproject.project.global.exception.ErrorCode.NO_AUTHORITY;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +28,7 @@ import static com.toyproject.project.global.exception.ErrorCode.NOT_FOUND_BOARD;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final MatchingRepository matchingRepository;
 
     /**
      * 모집글 작성
@@ -50,4 +59,24 @@ public class BoardService {
     }
 
 
+    /**
+     * 동행 신청자 조회
+     */
+    public List<MatchingResponseDto> getMatchingList(Long boardId, Member member) {
+        Board board = boardRepository.findById(boardId).orElseThrow(()
+                -> new CustomException(NOT_FOUND_BOARD));
+
+        if(!isAuthor(member, board)){
+            throw new CustomException(NO_AUTHORITY);
+        }
+
+        List<Matching> matchingList = matchingRepository.findByBoardIdAndStatus(boardId, PENDING);
+        return matchingList.stream()
+                .map(MatchingResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
+    private static boolean isAuthor(Member member, Board board) {
+        return board.getMember() == member;
+    }
 }

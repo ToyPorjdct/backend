@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.toyproject.project.domain.matching.domain.status.MatchingStatus.APPROVED;
-import static com.toyproject.project.domain.matching.domain.status.MatchingStatus.PENDING;
+import static com.toyproject.project.domain.matching.domain.status.MatchingStatus.*;
 import static com.toyproject.project.global.exception.ErrorCode.*;
 
 @Service
@@ -53,26 +52,6 @@ public class MatchingService {
         return saveMatching.getId();
     }
 
-    private static boolean isAuthor(Member member, Board board) {
-        return board.getMember().getId().equals(member.getId());
-    }
-
-    private boolean isAlreadyMatching(Member member, Board board) {
-        return matchingRepository.existsByBoardAndMember(board, member);
-    }
-
-    /**
-     * 동행 신청자 조회
-     */
-    public List<MatchingResponseDto> getMatchingList(Long boardId, Member member) {
-        boardRepository.findByIdAndMemberId(boardId, member.getId())
-                .orElseThrow(() -> new CustomException(NO_AUTHORITY));
-
-        List<Matching> matchingList = matchingRepository.findByBoardIdAndStatus(boardId, PENDING);
-        return matchingList.stream()
-                .map(MatchingResponseDto::from)
-                .collect(Collectors.toList());
-    }
 
     /**
      * 동행 신청 승인
@@ -83,4 +62,21 @@ public class MatchingService {
         matching.changeStatus(APPROVED);
     }
 
+    /**
+     * 동행 신청 거절
+     */
+    @Transactional
+    public void rejectMatching(Long matchingId, Member member) {
+        Matching matching = matchingRepository.findById(matchingId).orElseThrow();
+        matching.changeStatus(REJECTED);
+    }
+
+
+    private static boolean isAuthor(Member member, Board board) {
+        return board.getMember() == member;
+    }
+
+    private boolean isAlreadyMatching(Member member, Board board) {
+        return matchingRepository.existsByBoardAndMember(board, member);
+    }
 }
