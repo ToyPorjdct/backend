@@ -35,7 +35,7 @@ public class BoardService {
      * 모집글 작성
      */
     @Transactional
-    public Long createBoard(BoardCreateRequestDto boardCreateRequestDto, Member member) {
+    public Board createBoard(BoardCreateRequestDto boardCreateRequestDto, Member member) {
         Board board = Board.builder()
                 .title(boardCreateRequestDto.getTitle())
                 .description(boardCreateRequestDto.getDescription())
@@ -47,7 +47,7 @@ public class BoardService {
 
         Board savedBoard = boardRepository.save(board);
 
-        return savedBoard.getId();
+        return savedBoard;
     }
 
     /**
