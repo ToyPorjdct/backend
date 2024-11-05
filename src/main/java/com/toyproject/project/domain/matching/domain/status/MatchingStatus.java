@@ -1,6 +1,6 @@
-package com.toyproject.project.domain.participant.domain.status;
+package com.toyproject.project.domain.matching.domain.status;
 
-public enum ParticipationStatus {
+public enum MatchingStatus {
     PENDING,     // 참가 신청 대기 중
     APPROVED,    // 참가 승인 완료
     REJECTED,    // 참가 신청 거절

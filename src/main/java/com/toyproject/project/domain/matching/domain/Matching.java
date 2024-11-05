@@ -1,7 +1,7 @@
-package com.toyproject.project.domain.participant.domain;
+package com.toyproject.project.domain.matching.domain;
 
 import com.toyproject.project.domain.board.domain.Board;
-import com.toyproject.project.domain.participant.domain.status.ParticipationStatus;
+import com.toyproject.project.domain.matching.domain.status.MatchingStatus;
 import com.toyproject.project.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Participant {
+public class Matching {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "participant_id")
+    @Column(name = "matching_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,6 +29,10 @@ public class Participant {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private ParticipationStatus status = ParticipationStatus.PENDING;
+    private MatchingStatus status = MatchingStatus.PENDING;
 
+
+    public void changeStatus(MatchingStatus status) {
+        this.status = status;
+    }
 }
