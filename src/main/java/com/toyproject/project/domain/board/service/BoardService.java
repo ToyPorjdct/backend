@@ -51,6 +51,23 @@ public class BoardService {
     }
 
     /**
+     * 모집글 삭제
+     */
+    @Transactional
+    public void removeBoard(Long boardId, Member member) {
+        Board board = boardRepository.findById(boardId).orElseThrow(()
+                -> new CustomException(NOT_FOUND_BOARD));
+
+
+        if(!isAuthor(member, board)){
+            throw new CustomException(NO_AUTHORITY);
+        }
+
+        matchingRepository.deleteByBoardId(boardId);
+        boardRepository.delete(board);
+    }
+
+    /**
      * 모집글 상세 조회
      */
     public BoardDetailResponseDto getDetailBoards(Long boardId) {

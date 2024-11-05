@@ -34,6 +34,15 @@ public class BoardController {
         return ApiResponse.success(null, "모집글 작성 성공");
     }
 
+    @DeleteMapping("/{boardId}")
+    @Operation(summary = "모집글 삭제", description = "모집글 삭제")
+    public ResponseEntity<ApiResponse<String>> boardRemove(
+            @PathVariable Long boardId,
+            @AuthenticationMember Member member) {
+        boardService.removeBoard(boardId, member);
+        return ApiResponse.success(null, "모집글 삭제 성공");
+    }
+
     @GetMapping("/{boardId}")
     @Operation(summary = "모집글 상세 조회", description = "모집글 상세 조회")
     public ResponseEntity<ApiResponse<BoardDetailResponseDto>> boardsDetail(

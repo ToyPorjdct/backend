@@ -11,4 +11,6 @@ import java.util.List;
 public interface MatchingRepository extends JpaRepository<Matching, Long>{
     boolean existsByBoardAndMember(Board board, Member member);
     List<Matching> findByBoardIdAndStatus(Long boardId, MatchingStatus matchingStatus);
+
+    void deleteByBoardId(Long boardId);
 }
