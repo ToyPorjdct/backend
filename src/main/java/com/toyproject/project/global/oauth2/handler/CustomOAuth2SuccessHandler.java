@@ -3,6 +3,7 @@ package com.toyproject.project.global.oauth2.handler;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import com.toyproject.project.global.oauth2.dto.CustomOAuth2User;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,16 +33,21 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
         Long memberId = customUserDetails.getMember().getId();
 
-        String url = makeRedirectUrl(jwtTokenProvider.createToken(memberId));
+        String token = jwtTokenProvider.createToken(memberId);
 
-        getRedirectStrategy().sendRedirect(request, response, url);
+        response.addCookie(createCookie("Authorization", token));
+        response.sendRedirect("http://localhost:3000/oauth2/redirect");
+
     }
 
-    private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString("http://localhost:3000")
-                .queryParam("token", token)
-                .build().toUriString();
+    private Cookie createCookie(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        return cookie;
     }
+
+
 
 
 }
