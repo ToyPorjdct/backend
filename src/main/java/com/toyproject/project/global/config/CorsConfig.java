@@ -18,6 +18,7 @@ public class CorsConfig{
         configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 클라이언트 URL
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
