@@ -55,4 +55,8 @@ public class Member extends BaseEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

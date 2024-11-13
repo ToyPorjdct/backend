@@ -1,5 +1,6 @@
 package com.toyproject.project.domain.member.service;
 
+import com.toyproject.project.domain.member.dto.request.UpdateMemberRequest;
 import com.toyproject.project.domain.member.dto.response.MyInfoResponse;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
@@ -29,6 +30,12 @@ public class MemberService {
                 .updatedAt(member.getUpdatedAt())
                 .role(member.getRole())
                 .build();
+    }
+
+    @Transactional
+    public void updateMember(Member member, UpdateMemberRequest updateMemberRequest){
+        member.updateNickname(updateMemberRequest.getNickname());
+        memberRepository.save(member);
     }
 
 
