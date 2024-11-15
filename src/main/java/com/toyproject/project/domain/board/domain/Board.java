@@ -26,9 +26,13 @@ public class Board extends BaseEntity {
     private Long id;
     private String title;
     private String description;
+    private String destination;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer maxParticipant;
+    private Integer viewCount;
+    private Integer likesCount;
+    private boolean isClosed;
 
     @Builder.Default
     private Integer currentParticipant = 0;
