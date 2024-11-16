@@ -20,8 +20,6 @@ import static com.toyproject.project.global.exception.ErrorCode.EXCEED_MAX_PARTI
 @Entity
 public class Board extends BaseEntity {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -41,6 +39,7 @@ public class Board extends BaseEntity {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     public void increaseCurrentParticipant() {

@@ -19,8 +19,10 @@ public class TagList {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag_id")
     private Tag tag;
 }

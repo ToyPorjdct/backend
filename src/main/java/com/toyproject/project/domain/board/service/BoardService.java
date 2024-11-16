@@ -38,7 +38,6 @@ public class BoardService {
     private final MatchingRepository matchingRepository;
     private final TagRepository tagRepository;
     private final TagListRepository tagListRepository;
-    private final MemberRepository memberRepository;
 
     /**
      * 모집글 작성
@@ -104,12 +103,12 @@ public class BoardService {
      * 모집글 간단 조회
      */
     public List<BoardListResponseDto> getBoardList() {
-        List<Board> boards = boardRepository.findAll();
+        List<Board> boards = boardRepository.findAllWithMember();
 
         return boards.stream()
                 .map(board -> {
-                    List<String> tagList = tagListRepository.findByBoard(board).stream()
-                            .map(tag -> tag.getTag().getName())
+                    List<String> tagListList = tagListRepository.findByWithTag(board).stream()
+                            .map(tagList -> tagList.getTag().getName())
                             .collect(Collectors.toList());
 
                     return new BoardListResponseDto(
@@ -122,7 +121,7 @@ public class BoardService {
                             board.isClosed(),
                             board.getViewCount(),
                             board.getLikesCount(),
-                            tagList,
+                            tagListList,
                             board.getMember().getNickname(),
                             board.getMember().getProfileImage()
                     );
