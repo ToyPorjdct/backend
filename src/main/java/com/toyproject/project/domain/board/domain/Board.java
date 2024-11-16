@@ -20,9 +20,7 @@ import static com.toyproject.project.global.exception.ErrorCode.EXCEED_MAX_PARTI
 @Entity
 public class Board extends BaseEntity {
 
-    @Builder.Default private Integer viewCount = 0;
-    @Builder.Default private Integer likesCount = 0;
-    @Builder.Default private Integer currentParticipant = 0;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +33,11 @@ public class Board extends BaseEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer maxParticipant;
-    private boolean isClosed;
 
+    @Builder.Default private Integer viewCount = 0;
+    @Builder.Default private Integer likesCount = 0;
+    @Builder.Default private Integer currentParticipant = 0;
+    @Builder.Default private boolean isClosed = false;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

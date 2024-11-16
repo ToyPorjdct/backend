@@ -108,22 +108,22 @@ public class BoardService {
 
         return boards.stream()
                 .map(board -> {
-                    // 태그 목록을 TagList 테이블을 통해 가져옵니다
                     List<String> tagList = tagListRepository.findByBoard(board).stream()
                             .map(tag -> tag.getTag().getName())
                             .collect(Collectors.toList());
 
-                    // BoardSimpleResponseDto를 생성하여 반환
                     return new BoardListResponseDto(
                             board.getTitle(),
                             board.getStartDate(),
                             board.getEndDate(),
                             board.getDestination(),
                             board.getMaxParticipant(),
+                            board.isClosed(),
                             board.getViewCount(),
                             board.getLikesCount(),
                             tagList,
-                            board.getMember().getNickname()
+                            board.getMember().getNickname(),
+                            board.getMember().getProfileImage()
                     );
                 })
                 .collect(Collectors.toList());

@@ -25,9 +25,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping
-    @Operation(summary = "내정보 조회", description = "로그인한 회원의 정보를 조회합니다.")
+    @Operation(summary = "회원 정보 조회", description = "로그인한 회원의 정보를 조회합니다.")
     public ResponseEntity<ApiResponse<MyInfoResponse>> myInfo(@AuthenticationMember Member member) {
-        return ApiResponse.success(memberService.getMemberInfo(member), "내정보 조회 성공");
+        return ApiResponse.success(memberService.getMemberInfo(member), "회원정보 조회 성공");
     }
 
     @PatchMapping

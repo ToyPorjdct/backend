@@ -16,6 +16,7 @@ public class MyInfoResponse {
 
     private String nickname;
     private String email;
+    private String profileImage;
     private MemberRole role;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

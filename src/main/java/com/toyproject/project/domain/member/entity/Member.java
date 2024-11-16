@@ -37,6 +37,8 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
+    @Builder.Default
+    private String profileImage = "https://github.com/user-attachments/assets/dad652d0-41b9-4f6a-87b8-e1e28ba57e4a";
 
     public void updateSocialCode(String socialCode) {
         this.socialCode = socialCode;
