@@ -113,6 +113,7 @@ public class BoardService {
                             .collect(Collectors.toList());
 
                     return new BoardListResponseDto(
+                            board.getId(),
                             board.getTitle(),
                             board.getStartDate(),
                             board.getEndDate(),

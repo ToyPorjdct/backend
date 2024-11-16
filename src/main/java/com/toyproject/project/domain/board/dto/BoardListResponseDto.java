@@ -1,5 +1,6 @@
 package com.toyproject.project.domain.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +12,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class BoardListResponseDto {
+    private Long id; // 게시글 ID
     private String title; // 제목
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd")
     private LocalDateTime startDate; // 시작일
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd")
     private LocalDateTime endDate; // 종료일
     private String destination; // 여행지
     private Integer maxParticipant; // 최대인원
