@@ -19,6 +19,7 @@ public class BoardDetailResponseDto {
         private LocalDateTime endDate;
         private LocalDateTime createdAt;
 
+
         public static BoardDetailResponseDto from(Board board) {
                 return new BoardDetailResponseDto(
                         board.getId(),

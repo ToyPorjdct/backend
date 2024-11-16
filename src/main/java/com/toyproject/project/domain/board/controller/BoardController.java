@@ -2,6 +2,7 @@ package com.toyproject.project.domain.board.controller;
 
 import com.toyproject.project.domain.board.dto.BoardCreateRequestDto;
 import com.toyproject.project.domain.board.dto.BoardDetailResponseDto;
+import com.toyproject.project.domain.board.dto.BoardListResponseDto;
 import com.toyproject.project.domain.board.service.BoardService;
 import com.toyproject.project.domain.matching.dto.MatchingResponseDto;
 import com.toyproject.project.domain.member.entity.Member;
@@ -45,10 +46,16 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     @Operation(summary = "모집글 상세 조회", description = "모집글 상세 조회")
-    public ResponseEntity<ApiResponse<BoardDetailResponseDto>> boardsDetail(
+    public ResponseEntity<ApiResponse<BoardDetailResponseDto>> boardDetail(
             @PathVariable Long boardId
     ) {
-        return ApiResponse.success(boardService.getDetailBoards(boardId), "모집글 상세 조회 성공");
+        return ApiResponse.success(boardService.getBoardDetail(boardId), "모집글 상세 조회 성공");
+    }
+
+    @GetMapping
+    @Operation(summary = "모집글 전체 조회", description = "모집글 전체 조회")
+    public ResponseEntity<ApiResponse<List<BoardListResponseDto>>> boardList() {
+        return ApiResponse.success(boardService.getBoardList(), "모집글 전체 조회 성공");
     }
 
     @GetMapping("/{boardId}/matching")

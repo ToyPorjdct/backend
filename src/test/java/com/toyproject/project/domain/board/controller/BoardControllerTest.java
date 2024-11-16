@@ -118,7 +118,7 @@ class BoardControllerTest {
                 .endDate(LocalDateTime.parse("2024-11-25T13:47:13"))
                 .build();
 
-        given(boardService.getDetailBoards(1L)).willReturn(boardDetailDto);
+        given(boardService.getBoardDetail(1L)).willReturn(boardDetailDto);
 
         //when
         mockMvc.perform(get("/board/{boardId}", 1L)
@@ -131,7 +131,7 @@ class BoardControllerTest {
 
 
         //then
-        verify(boardService).getDetailBoards(1L);
+        verify(boardService).getBoardDetail(1L);
     }
 
 

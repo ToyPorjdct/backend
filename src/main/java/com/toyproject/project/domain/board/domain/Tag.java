@@ -18,5 +18,9 @@ public class Tag {
     @Column(name = "tag_id")
     private Long id;
 
-    private String tagName;
+    private String name;
+
+    public Tag(String tagName) {
+        this.name = tagName;
+    }
 }

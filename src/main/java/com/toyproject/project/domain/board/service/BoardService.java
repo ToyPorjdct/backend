@@ -1,13 +1,19 @@
 package com.toyproject.project.domain.board.service;
 
 import com.toyproject.project.domain.board.domain.Board;
+import com.toyproject.project.domain.board.domain.Tag;
+import com.toyproject.project.domain.board.domain.TagList;
 import com.toyproject.project.domain.board.dto.BoardCreateRequestDto;
 import com.toyproject.project.domain.board.dto.BoardDetailResponseDto;
+import com.toyproject.project.domain.board.dto.BoardListResponseDto;
 import com.toyproject.project.domain.board.repository.BoardRepository;
+import com.toyproject.project.domain.board.repository.TagListRepository;
+import com.toyproject.project.domain.board.repository.TagRepository;
 import com.toyproject.project.domain.matching.domain.Matching;
 import com.toyproject.project.domain.matching.dto.MatchingResponseDto;
 import com.toyproject.project.domain.matching.repository.MatchingRepository;
 import com.toyproject.project.domain.member.entity.Member;
+import com.toyproject.project.domain.member.repository.MemberRepository;
 import com.toyproject.project.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +36,9 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final MatchingRepository matchingRepository;
+    private final TagRepository tagRepository;
+    private final TagListRepository tagListRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 모집글 작성
@@ -39,13 +48,28 @@ public class BoardService {
         Board board = Board.builder()
                 .title(boardCreateRequestDto.getTitle())
                 .description(boardCreateRequestDto.getDescription())
-                .member(member)
-                .maxParticipant(boardCreateRequestDto.getMaxParticipant())
+                .destination(boardCreateRequestDto.getDestination())
                 .startDate(boardCreateRequestDto.getStartDate())
                 .endDate(boardCreateRequestDto.getEndDate())
+                .maxParticipant(boardCreateRequestDto.getMaxParticipant())
+                .member(member)
                 .build();
 
         Board savedBoard = boardRepository.save(board);
+
+        // 태그 저장
+        for (String tagName : boardCreateRequestDto.getTagNames()) {
+            Tag tag = tagRepository.findByName(tagName)
+                    .orElseGet(() -> tagRepository.save(new Tag(tagName)));
+
+            TagList tagList = TagList.builder()
+                    .board(savedBoard)
+                    .tag(tag)
+                    .build();
+
+            tagListRepository.save(tagList);
+        }
+
 
         return savedBoard;
     }
@@ -70,12 +94,40 @@ public class BoardService {
     /**
      * 모집글 상세 조회
      */
-    public BoardDetailResponseDto getDetailBoards(Long boardId) {
+    public BoardDetailResponseDto getBoardDetail(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()
                 -> new CustomException(NOT_FOUND_BOARD));
         return BoardDetailResponseDto.from(board);
     }
 
+    /**
+     * 모집글 간단 조회
+     */
+    public List<BoardListResponseDto> getBoardList() {
+        List<Board> boards = boardRepository.findAll();
+
+        return boards.stream()
+                .map(board -> {
+                    // 태그 목록을 TagList 테이블을 통해 가져옵니다
+                    List<String> tagList = tagListRepository.findByBoard(board).stream()
+                            .map(tag -> tag.getTag().getName())
+                            .collect(Collectors.toList());
+
+                    // BoardSimpleResponseDto를 생성하여 반환
+                    return new BoardListResponseDto(
+                            board.getTitle(),
+                            board.getStartDate(),
+                            board.getEndDate(),
+                            board.getDestination(),
+                            board.getMaxParticipant(),
+                            board.getViewCount(),
+                            board.getLikesCount(),
+                            tagList,
+                            board.getMember().getNickname()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
 
     /**
      * 동행 신청자 조회

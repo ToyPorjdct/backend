@@ -13,6 +13,7 @@ import com.toyproject.project.global.login.filter.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -75,8 +76,8 @@ public class SecurityConfig {
         // 인가 관리
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**",
-                                "/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**", "/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/board","/board/*").permitAll()
                         .requestMatchers("/member/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());

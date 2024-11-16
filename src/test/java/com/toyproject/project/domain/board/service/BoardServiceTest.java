@@ -141,7 +141,7 @@ class BoardServiceTest {
         when(boardRepository.findById(boardId)).thenReturn(Optional.of(savedBoard));
 
         // when
-        BoardDetailResponseDto response = boardService.getDetailBoards(boardId);
+        BoardDetailResponseDto response = boardService.getBoardDetail(boardId);
 
         // then
         verify(boardRepository).findById(boardId);
