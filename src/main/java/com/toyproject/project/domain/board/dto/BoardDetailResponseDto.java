@@ -4,6 +4,7 @@ import com.toyproject.project.domain.board.domain.Board;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,8 +16,8 @@ public class BoardDetailResponseDto {
         private String memberNickname;
         private Integer maxParticipant;
         private Integer currentParticipant;
-        private LocalDateTime startDate;
-        private LocalDateTime endDate;
+        private LocalDate startDate;
+        private LocalDate endDate;
         private LocalDateTime createdAt;
 
 

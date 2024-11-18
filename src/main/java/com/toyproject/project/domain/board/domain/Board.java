@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.toyproject.project.global.exception.ErrorCode.EXCEED_MAX_PARTICIPANT;
@@ -28,8 +29,8 @@ public class Board extends BaseEntity {
     private String title;
     private String description;
     private String destination;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer maxParticipant;
 
     @Builder.Default private Integer viewCount = 0;

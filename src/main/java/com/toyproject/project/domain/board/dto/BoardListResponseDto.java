@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class BoardListResponseDto {
     private Long id; // 게시글 ID
     private String title; // 제목
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM.dd")
-    private LocalDateTime startDate; // 시작일
+    private LocalDate startDate; // 시작일
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM.dd")
-    private LocalDateTime endDate; // 종료일
+    private LocalDate endDate; // 종료일
     private String destination; // 여행지
     private Integer maxParticipant; // 최대인원
     private Boolean isClosed; // 마감 여부
