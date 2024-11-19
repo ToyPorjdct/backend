@@ -97,7 +97,31 @@ public class BoardService {
     public BoardDetailResponseDto getBoardDetail(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(()
                 -> new CustomException(NOT_FOUND_BOARD));
-        return BoardDetailResponseDto.from(board);
+
+        List<String> tagListList = tagListRepository.findByWithTag(board).stream()
+                .map(tagList -> tagList.getTag().getName())
+                .collect(Collectors.toList());
+
+        AuthorResponseDto author = new AuthorResponseDto(
+                board.getMember().getNickname(),
+                board.getMember().getProfileImage()
+        );
+
+        return BoardDetailResponseDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .startDate(board.getStartDate())
+                .endDate(board.getEndDate())
+                .description(board.getDescription())
+                .destination(board.getDestination())
+                .maxParticipant(board.getMaxParticipant())
+                .isClosed(board.isClosed())
+                .views(board.getViewCount())
+                .likes(board.getLikesCount())
+                .tags(tagListList)
+                .author(author)
+                .createdAt(board.getCreatedAt())
+                .build();
     }
 
     /**
