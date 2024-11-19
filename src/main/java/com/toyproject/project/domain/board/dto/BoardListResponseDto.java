@@ -25,8 +25,6 @@ public class BoardListResponseDto {
     private Integer views; // 조회수
     private Integer likes; // 좋아요 수
     private List<String> tags; // 태그 목록
-    private String nickname; // 작성자 닉네임
-    private String profileImage; // 작성자 프로필 사진
-
+    private AuthorResponseDto author;
 
 }

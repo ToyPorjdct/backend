@@ -3,6 +3,7 @@ package com.toyproject.project.domain.board.service;
 import com.toyproject.project.domain.board.domain.Board;
 import com.toyproject.project.domain.board.domain.Tag;
 import com.toyproject.project.domain.board.domain.TagList;
+import com.toyproject.project.domain.board.dto.AuthorResponseDto;
 import com.toyproject.project.domain.board.dto.BoardCreateRequestDto;
 import com.toyproject.project.domain.board.dto.BoardDetailResponseDto;
 import com.toyproject.project.domain.board.dto.BoardListResponseDto;
@@ -111,20 +112,22 @@ public class BoardService {
                             .map(tagList -> tagList.getTag().getName())
                             .collect(Collectors.toList());
 
-                    return new BoardListResponseDto(
-                            board.getId(),
-                            board.getTitle(),
-                            board.getStartDate(),
-                            board.getEndDate(),
-                            board.getDestination(),
-                            board.getMaxParticipant(),
-                            board.isClosed(),
-                            board.getViewCount(),
-                            board.getLikesCount(),
-                            tagListList,
-                            board.getMember().getNickname(),
-                            board.getMember().getProfileImage()
-                    );
+                    return BoardListResponseDto.builder()
+                            .id(board.getId())
+                            .title(board.getTitle())
+                            .startDate(board.getStartDate())
+                            .endDate(board.getEndDate())
+                            .destination(board.getDestination())
+                            .maxParticipant(board.getMaxParticipant())
+                            .isClosed(board.isClosed())
+                            .views(board.getViewCount())
+                            .likes(board.getLikesCount())
+                            .tags(tagListList)
+                            .author(new AuthorResponseDto(
+                                    board.getMember().getNickname(),
+                                    board.getMember().getProfileImage())
+                            )
+                            .build();
                 })
                 .collect(Collectors.toList());
     }
