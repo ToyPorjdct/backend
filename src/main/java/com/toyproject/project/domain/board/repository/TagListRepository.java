@@ -12,6 +12,11 @@ import java.util.List;
 @Repository
 public interface TagListRepository extends JpaRepository<TagList, Long> {
 
-    @Query("SELECT t FROM TagList t JOIN FETCH t.tag WHERE t.board = :board")
+    @Query("""
+            SELECT t 
+            FROM TagList t 
+            JOIN FETCH t.tag 
+            WHERE t.board = :board
+            """)
     List<TagList> findByWithTag(Board board);
 }
