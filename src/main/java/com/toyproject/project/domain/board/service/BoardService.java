@@ -14,7 +14,6 @@ import com.toyproject.project.domain.matching.domain.Matching;
 import com.toyproject.project.domain.matching.dto.MatchingResponseDto;
 import com.toyproject.project.domain.matching.repository.MatchingRepository;
 import com.toyproject.project.domain.member.entity.Member;
-import com.toyproject.project.domain.member.repository.MemberRepository;
 import com.toyproject.project.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,8 +94,8 @@ public class BoardService {
      * 모집글 상세 조회
      */
     public BoardDetailResponseDto getBoardDetail(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(()
-                -> new CustomException(NOT_FOUND_BOARD));
+        Board board = boardRepository.findByIdWithMember(boardId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_BOARD));
 
         List<String> tagListList = tagListRepository.findByWithTag(board).stream()
                 .map(tagList -> tagList.getTag().getName())

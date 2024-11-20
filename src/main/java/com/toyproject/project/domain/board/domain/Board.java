@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static com.toyproject.project.global.exception.ErrorCode.EXCEED_MAX_PARTICIPANT;
 
@@ -50,4 +49,7 @@ public class Board extends BaseEntity {
         currentParticipant++;
     }
 
+    public void updateLikesCount(int count) {
+        likesCount = count;
+    }
 }

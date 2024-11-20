@@ -27,10 +27,13 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER(404, "존재하지 않는 사용자입니다."),
     NOT_FOUND_BOARD(404, "존재하지 않는 게시글입니다."),
 
+
+
     //409 : 중복된 리소스
     ALREADY_EXIST_MEMBER(409, "이미 존재하는 사용자입니다."),
     ALREADY_EXIST_PASSWORD(409, "이미 사용 중인 비밀번호입니다."),
     ALREADY_EXIST_PARTICIPANT(409, "이미 동행 신청한 게시글입니다."),
+    DUPLICATE_LIKE(409, "이미 좋아요를 누른 게시글입니다."),
 
     //500 : INTERNAL SERVER ERROR
     INTERNAL_SERVER_ERROR(500, "서버 내부 에러입니다.");
