@@ -28,9 +28,5 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    private String description;
-
-    private LocalDateTime createdAt;
-
-
+    private String content;
 }
