@@ -1,4 +1,4 @@
-package com.toyproject.project.global.socket;
+package com.toyproject.project.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.toyproject.project.global.socket;
+package com.toyproject.project.domain.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toyproject.project.domain.chat.domain.Chat;
