@@ -37,7 +37,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         // roomId에 해당하는 세션 저장
         roomSessions.computeIfAbsent(roomId, key -> new CopyOnWriteArraySet<>()).add(session);
 
-        // 이전 채팅 내역 전송
+        // 이전 채팅 내역
         List<Chat> previousChats = chatService.getChatListByRoom(roomId);
         for (Chat chat : previousChats) {
             session.sendMessage(new TextMessage(mapper.writeValueAsString(chat)));
@@ -56,14 +56,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        chatService.saveChatMessage(chatMessage);
+        Chat chat = chatService.saveChatMessage(chatMessage);
 
         // 해당 roomId에 연결된 세션들에게만 메시지 전송
         Set<WebSocketSession> sessions = roomSessions.get(roomId);
         if (sessions != null) {
             for (WebSocketSession s : sessions) {
                 if (s.isOpen()) {
-                    s.sendMessage(new TextMessage(message.getPayload()));
+                    s.sendMessage(new TextMessage(mapper.writeValueAsString(chat)));
                 }
             }
         }

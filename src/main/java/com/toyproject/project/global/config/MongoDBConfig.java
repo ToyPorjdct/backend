@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 //_class 컬럼이 자동 생성 방지
 @Configuration
 @EnableMongoRepositories("com.example.chatserver.repository")
-@EnableMongoAuditing
 public class MongoDBConfig {
 
     @Bean
@@ -27,4 +26,5 @@ public class MongoDBConfig {
         converter.setTypeMapper(new DefaultMongoTypeMapper(null));
         return converter;
     }
+
 }

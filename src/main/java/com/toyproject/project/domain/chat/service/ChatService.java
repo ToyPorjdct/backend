@@ -44,14 +44,14 @@ public class ChatService {
     /**
      * 채팅 메세지 저장
      */
-    public void saveChatMessage(ChatMessage chatMessage) {
+    public Chat saveChatMessage(ChatMessage chatMessage) {
         Chat chat = Chat.builder()
                 .roomId(chatMessage.getRoomId())
                 .sender(chatMessage.getSender())
                 .receiver(chatMessage.getReceiver())
                 .message(chatMessage.getMessage())
                 .build();
-        chatRepository.save(chat);
+        return chatRepository.save(chat);
     }
 }
 
