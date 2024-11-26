@@ -48,7 +48,6 @@ public class ChatService {
         Chat chat = Chat.builder()
                 .roomId(chatMessage.getRoomId())
                 .sender(chatMessage.getSender())
-                .receiver(chatMessage.getReceiver())
                 .message(chatMessage.getMessage())
                 .build();
         return chatRepository.save(chat);

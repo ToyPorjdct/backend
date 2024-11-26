@@ -25,7 +25,6 @@ public class Chat {
     private String roomId;
     private String message;
     private Long sender;
-    private Long receiver;
 
     @CreatedDate
     private LocalDateTime createdAt;
