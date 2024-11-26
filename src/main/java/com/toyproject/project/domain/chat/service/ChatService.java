@@ -10,7 +10,6 @@ import com.toyproject.project.domain.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +17,6 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final ChatRoomRepository chatRoomRepository;
-
-
 
 
     public ChatRoom getChatRoom(String roomId) {
@@ -30,10 +27,7 @@ public class ChatService {
      * 채팅방 생성
      */
     public ChatRoom createChatRoom(ChatRoomRequest chatRoomRequest) {
-        String roomId = UUID.randomUUID().toString().substring(0, 10);
-
         ChatRoom chatRoom = ChatRoom.builder()
-                .id(roomId)
                 .name(chatRoomRequest.getName())
                 .build();
         return chatRoomRepository.save(chatRoom);
