@@ -7,8 +7,14 @@ import com.toyproject.project.domain.chat.dto.ChatMessage;
 import com.toyproject.project.domain.chat.dto.ChatRoomRequest;
 import com.toyproject.project.domain.chat.repository.ChatRepository;
 import com.toyproject.project.domain.chat.repository.ChatRoomRepository;
+import com.toyproject.project.domain.member.entity.Member;
+import com.toyproject.project.global.exception.CustomException;
+import com.toyproject.project.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -26,9 +32,14 @@ public class ChatService {
     /**
      * 채팅방 생성
      */
-    public ChatRoom createChatRoom(ChatRoomRequest chatRoomRequest) {
+    public ChatRoom createChatRoom(Member member, ChatRoomRequest chatRoomRequest) {
+        if(chatRoomRequest.getMember() == null || chatRoomRequest.getMember() == member.getId()){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
         ChatRoom chatRoom = ChatRoom.builder()
                 .name(chatRoomRequest.getName())
+                .memberlist(new HashSet<>(Arrays.asList(member.getId(), chatRoomRequest.getMember())))
                 .build();
         return chatRoomRepository.save(chatRoom);
     }
@@ -45,12 +56,13 @@ public class ChatService {
      * 채팅 메세지 저장
      */
     public Chat saveChatMessage(ChatMessage chatMessage) {
-        Chat chat = Chat.builder()
+        return chatRepository.save(
+                Chat.builder()
                 .roomId(chatMessage.getRoomId())
                 .sender(chatMessage.getSender())
                 .message(chatMessage.getMessage())
-                .build();
-        return chatRepository.save(chat);
+                .build()
+        );
     }
 }
 

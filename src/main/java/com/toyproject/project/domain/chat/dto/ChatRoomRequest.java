@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChatRoomRequest {
-
     private String name;
+    private Long member;
 }
