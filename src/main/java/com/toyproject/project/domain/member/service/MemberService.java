@@ -24,6 +24,7 @@ public class MemberService {
 
     public MyInfoResponse getMemberInfo(Member member){
         return MyInfoResponse.builder()
+                .id(member.getId())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
                 .profileImage(member.getProfileImage())
