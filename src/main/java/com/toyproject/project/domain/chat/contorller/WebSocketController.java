@@ -18,7 +18,7 @@ public class WebSocketController {
 
     private final ChatService chatService;
 
-    @MessageMapping("/chat.{roomId}")  // chat 주소로 발행된 메시지를
+    @MessageMapping("/chat.{roomId}")  // /pub/chat 주소로 발행된 메시지를
     @SendTo("/sub/chat.{roomId}")      // 이 주소를 구독한 사용자에게 전달
     public String message(
             ChatMessage chatMessage,

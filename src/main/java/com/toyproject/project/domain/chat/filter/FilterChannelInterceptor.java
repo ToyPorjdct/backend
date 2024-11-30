@@ -23,7 +23,12 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
-    // websocket을 통해 들어온 요청이 처리 되기전 실행됨
+
+
+    /**
+     * websocket은 http 요청이 아니므로 기존의 jwt filter를 통해 인증처리가 되지 않음
+     * 그래서 별도로 websocket을 통해 들어온 요청을 처리하기 위한 인터셉터를 작성
+     */
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         log.info("ChatHandler");
