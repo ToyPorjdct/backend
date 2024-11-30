@@ -1,6 +1,6 @@
-package com.toyproject.project.global.config;
+package com.toyproject.project.domain.chat.config;
 
-import com.toyproject.project.domain.chat.service.FilterChannelInterceptor;
+import com.toyproject.project.domain.chat.filter.FilterChannelInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

@@ -1,4 +1,4 @@
-package com.toyproject.project.domain.chat.service;
+package com.toyproject.project.domain.chat.filter;
 
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
