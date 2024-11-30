@@ -1,24 +1,37 @@
 package com.toyproject.project.global.config;
 
+import com.toyproject.project.domain.chat.service.FilterChannelInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.messaging.simp.config.ChannelRegistration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-@EnableWebSocket
+@EnableWebSocketMessageBroker
 @RequiredArgsConstructor
-public class WebSocketConfig implements WebSocketConfigurer {
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final WebSocketHandler webSocketHandler;
+    private final FilterChannelInterceptor filterChannelInterceptor;
+
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry
-                .addHandler(webSocketHandler, "/ws/chat")
-                .setAllowedOriginPatterns("*");
+    public void registerStompEndpoints(StompEndpointRegistry registry){
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("http://localhost:3000", "http://127.0.0.1:5500")
+                .withSockJS();
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry){
+        registry.enableSimpleBroker("/sub"); // 메시지 송신
+        registry.setApplicationDestinationPrefixes("/pub"); // 메시지 수신
+    }
+
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(filterChannelInterceptor);
     }
 
 }
