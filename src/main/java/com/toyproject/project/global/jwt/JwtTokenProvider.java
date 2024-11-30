@@ -39,6 +39,7 @@ public class JwtTokenProvider {
      * @return uuid
      */
     public String getMemberId(String token) {
+        token = token.replace("Bearer ", "");
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
     }
 

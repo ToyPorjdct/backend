@@ -11,6 +11,7 @@ import com.toyproject.project.domain.chat.repository.ChatRoomRepository;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.global.exception.CustomException;
 import com.toyproject.project.global.exception.ErrorCode;
+import com.toyproject.project.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
     public ChatRoom getChatRoom(String roomId) {
@@ -57,11 +59,12 @@ public class ChatService {
     /**
      * 채팅 메세지 저장
      */
-    public Chat saveChatMessage(ChatMessage chatMessage) {
+    public Chat saveChatMessage(ChatMessage chatMessage, String roomId, String token) {
+        Long memberId = Long.parseLong(jwtTokenProvider.getMemberId(token));
         return chatRepository.save(
                 Chat.builder()
-                .roomId(chatMessage.getRoomId())
-                .sender(chatMessage.getSender())
+                .roomId(roomId)
+                .sender(memberId)
                 .message(chatMessage.getMessage())
                 .build()
         );
