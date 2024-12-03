@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface MemberChatRoomRepository extends JpaRepository<MemberChatRoom, Long>{
 
-    // 멤버와 채팅방 페치조인
     @Query(""" 
             SELECT m 
             FROM MemberChatRoom m 
