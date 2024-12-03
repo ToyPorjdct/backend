@@ -1,5 +1,6 @@
 package com.toyproject.project.domain.chat.contorller;
 
+import com.toyproject.project.domain.chat.dto.ChatResponse;
 import com.toyproject.project.domain.chat.dto.ChatRoomListResponse;
 import com.toyproject.project.domain.chat.dto.ChatRoomRequest;
 import com.toyproject.project.domain.chat.service.ChatService;
@@ -38,6 +39,13 @@ public class ChatController {
     public ResponseEntity<ApiResponse<List<ChatRoomListResponse>>> getChatRoom(
             @AuthenticationMember Member member) {
         return ApiResponse.success(chatService.getChatRoomList(member), "success");
+    }
 
+
+    @GetMapping("/{roomId}")
+    @Operation(summary = "채팅방 이전 내역 조회")
+    public ResponseEntity<ApiResponse<List<ChatResponse>>> getChatRoom(
+            @PathVariable String roomId) {
+        return ApiResponse.success(chatService.getChatListByRoom(roomId),"success");
     }
 }

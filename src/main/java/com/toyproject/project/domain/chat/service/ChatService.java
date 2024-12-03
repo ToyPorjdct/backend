@@ -1,14 +1,17 @@
 package com.toyproject.project.domain.chat.service;
 
 
+import com.toyproject.project.domain.board.dto.AuthorResponseDto;
 import com.toyproject.project.domain.chat.domain.Chat;
 import com.toyproject.project.domain.chat.domain.ChatRoom;
 import com.toyproject.project.domain.chat.dto.ChatMessage;
+import com.toyproject.project.domain.chat.dto.ChatResponse;
 import com.toyproject.project.domain.chat.dto.ChatRoomListResponse;
 import com.toyproject.project.domain.chat.dto.ChatRoomRequest;
 import com.toyproject.project.domain.chat.repository.ChatRepository;
 import com.toyproject.project.domain.chat.repository.ChatRoomRepository;
 import com.toyproject.project.domain.member.entity.Member;
+import com.toyproject.project.domain.member.repository.MemberRepository;
 import com.toyproject.project.global.exception.CustomException;
 import com.toyproject.project.global.exception.ErrorCode;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
@@ -26,6 +29,7 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
 
@@ -50,10 +54,27 @@ public class ChatService {
 
 
     /**
-     * 채팅방의 모든 메세지 조회
+     * 채티방 이전 메세지 조회
      */
-    public List<Chat> getChatListByRoom(String roomId) {
-        return chatRepository.findByRoomId(roomId);
+    public List<ChatResponse> getChatListByRoom(String roomId) {
+        List<Chat> chatList = chatRepository.findByRoomIdOrderByCreatedAtAsc(roomId);
+
+        return chatList.stream()
+                .map(chat -> {
+                    AuthorResponseDto author = memberRepository.findById(chat.getSender())
+                            .map(member -> new AuthorResponseDto(
+                                    member.getNickname(),
+                                    member.getProfileImage()))
+                            .orElse(new AuthorResponseDto("Unknown", ""));
+
+                    return ChatResponse.builder()
+                            .roomId(chat.getRoomId())
+                            .message(chat.getMessage())
+                            .author(author)
+                            .createdAt(chat.getCreatedAt().toString())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     /**

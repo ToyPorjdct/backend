@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ChatRepository extends MongoRepository<Chat, String>{
-    List<Chat> findByRoomId(String roomId);
+
+    List<Chat> findByRoomIdOrderByCreatedAtAsc(String roomId);
 }
