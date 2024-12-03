@@ -42,7 +42,7 @@ public class ChatController {
     }
 
 
-    @GetMapping("/{roomId}")
+    @GetMapping("/room/{roomId}")
     @Operation(summary = "채팅방 이전 내역 조회")
     public ResponseEntity<ApiResponse<List<ChatResponse>>> getChatRoom(
             @PathVariable Long roomId) {
