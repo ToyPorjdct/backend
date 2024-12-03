@@ -36,27 +36,34 @@ public class ChatService {
     /**
      * 채팅방 생성
      */
-    public ChatRoom createChatRoom(Member cuurentMember, ChatRoomRequest chatRoomRequest) {
+    public void createChatRoom(Member cuurentMember, ChatRoomRequest chatRoomRequest) {
         Member otherMember = memberRepository.findById(chatRoomRequest.getOtherMemberId()).orElseThrow();
 
-        ChatRoom chatRoom = ChatRoom.builder()
+        chatRoomRepository.save(
+                ChatRoom.builder()
                 .name(chatRoomRequest.getName())
-                .build();
-        chatRoomRepository.save(chatRoom);
+                .build()
+        );
 
-        MemberChatRoom memberChatRoom1 = MemberChatRoom.builder()
+        memberChatRoomRepository.save(
+                MemberChatRoom.builder()
                 .member(cuurentMember)
-                .chatRoom(chatRoom)
-                .build();
-        memberChatRoomRepository.save(memberChatRoom1);
+                .chatRoom(
+                        ChatRoom.builder()
+                        .name(chatRoomRequest.getName())
+                        .build()
+                )
+                .build()
+        );
 
-        MemberChatRoom memberChatRoom2 = MemberChatRoom.builder()
+        memberChatRoomRepository.save(
+                MemberChatRoom.builder()
                 .member(otherMember)
-                .chatRoom(chatRoom)
-                .build();
-        memberChatRoomRepository.save(memberChatRoom2);
-
-        return chatRoom;
+                .chatRoom(ChatRoom.builder()
+                        .name(chatRoomRequest.getName())
+                        .build())
+                .build()
+        );
     }
 
     /**
