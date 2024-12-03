@@ -1,4 +1,4 @@
-package com.toyproject.project.domain.chat.repository;
+package com.toyproject.project.domain.chat.repository.mongo;
 
 import com.toyproject.project.domain.chat.domain.Chat;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface ChatRepository extends MongoRepository<Chat, String>{
 
-    List<Chat> findByRoomIdOrderByCreatedAtAsc(String roomId);
+    List<Chat> findByRoomIdOrderByCreatedAtAsc(Long roomId);
 }

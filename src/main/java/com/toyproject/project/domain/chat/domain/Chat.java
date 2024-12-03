@@ -22,8 +22,8 @@ public class Chat {
     @Id
     @Column(name = "chat_id")
     private String id;
-    private String roomId;
     private String message;
+    private Long roomId;
     private Long sender;
 
     @CreatedDate

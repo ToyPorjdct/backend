@@ -1,32 +1,25 @@
 package com.toyproject.project.domain.chat.domain;
 
 
-import jakarta.persistence.Column;
+import com.toyproject.project.global.entity.BaseEntity;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+
 
 
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Document("chat_room")
-public class ChatRoom {
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "chat_room")
+public class ChatRoom extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "chat_room_id")
-    private String id;
+    private Long id;
+
     private String name;
-
-    @Builder.Default
-    private Set<Long> memberlist = new HashSet<>();
-
-    @CreatedDate
-    private LocalDateTime createdAt;
 }
