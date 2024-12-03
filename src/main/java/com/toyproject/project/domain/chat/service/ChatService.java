@@ -4,22 +4,20 @@ package com.toyproject.project.domain.chat.service;
 import com.toyproject.project.domain.board.dto.AuthorResponseDto;
 import com.toyproject.project.domain.chat.domain.Chat;
 import com.toyproject.project.domain.chat.domain.ChatRoom;
+import com.toyproject.project.domain.chat.domain.MemberChatRoom;
 import com.toyproject.project.domain.chat.dto.ChatMessage;
 import com.toyproject.project.domain.chat.dto.ChatResponse;
 import com.toyproject.project.domain.chat.dto.ChatRoomListResponse;
 import com.toyproject.project.domain.chat.dto.ChatRoomRequest;
-import com.toyproject.project.domain.chat.repository.ChatRepository;
+import com.toyproject.project.domain.chat.repository.MemberChatRoomRepository;
+import com.toyproject.project.domain.chat.repository.mongo.ChatRepository;
 import com.toyproject.project.domain.chat.repository.ChatRoomRepository;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
-import com.toyproject.project.global.exception.CustomException;
-import com.toyproject.project.global.exception.ErrorCode;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,34 +27,42 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final MemberChatRoomRepository memberChatRoomRepository;
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
 
-    public ChatRoom getChatRoom(String roomId) {
-        return chatRoomRepository.findById(roomId).orElseThrow();
-    }
 
     /**
      * 채팅방 생성
      */
-    public ChatRoom createChatRoom(Member member, ChatRoomRequest chatRoomRequest) {
-        if(chatRoomRequest.getMember() == null || chatRoomRequest.getMember() == member.getId()){
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    public ChatRoom createChatRoom(Member cuurentMember, ChatRoomRequest chatRoomRequest) {
+        Member otherMember = memberRepository.findById(chatRoomRequest.getOtherMemberId()).orElseThrow();
 
         ChatRoom chatRoom = ChatRoom.builder()
                 .name(chatRoomRequest.getName())
-                .memberlist(new HashSet<>(Arrays.asList(member.getId(), chatRoomRequest.getMember())))
                 .build();
-        return chatRoomRepository.save(chatRoom);
-    }
+        chatRoomRepository.save(chatRoom);
 
+        MemberChatRoom memberChatRoom1 = MemberChatRoom.builder()
+                .member(cuurentMember)
+                .chatRoom(chatRoom)
+                .build();
+        memberChatRoomRepository.save(memberChatRoom1);
+
+        MemberChatRoom memberChatRoom2 = MemberChatRoom.builder()
+                .member(otherMember)
+                .chatRoom(chatRoom)
+                .build();
+        memberChatRoomRepository.save(memberChatRoom2);
+
+        return chatRoom;
+    }
 
     /**
      * 채티방 이전 메세지 조회
      */
-    public List<ChatResponse> getChatListByRoom(String roomId) {
+    public List<ChatResponse> getChatListByRoom(Long roomId) {
         List<Chat> chatList = chatRepository.findByRoomIdOrderByCreatedAtAsc(roomId);
 
         return chatList.stream()
@@ -68,7 +74,7 @@ public class ChatService {
                             .orElse(new AuthorResponseDto("Unknown", ""));
 
                     return ChatResponse.builder()
-                            .roomId(chat.getRoomId())
+                            .chatId(chat.getId())
                             .message(chat.getMessage())
                             .author(author)
                             .createdAt(chat.getCreatedAt().toString())
@@ -80,7 +86,7 @@ public class ChatService {
     /**
      * 채팅 메세지 저장
      */
-    public Chat saveChatMessage(ChatMessage chatMessage, String roomId, String token) {
+    public Chat saveChatMessage(ChatMessage chatMessage, Long roomId, String token) {
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberId(token));
         return chatRepository.save(
                 Chat.builder()
@@ -94,11 +100,16 @@ public class ChatService {
     /**
      * 채팅방 목록 조회
      */
-    public List<ChatRoomListResponse> getChatRoomList(Member member) {
-        List<ChatRoom> chatRoomList = chatRoomRepository.findByMemberlistContaining(member.getId());
-        return chatRoomList.stream()
-                .map(chatRoom -> new ChatRoomListResponse(chatRoom.getName(), chatRoom.getId()))
+    public List<ChatRoomListResponse> getChatRoomList(Member cuurentMember) {
+        List<MemberChatRoom> memberChatRoomList = memberChatRoomRepository.findByMemberId(cuurentMember.getId());
+
+        return memberChatRoomList.stream()
+                .map(memberChatRoom -> {
+                    ChatRoom chatRoom = memberChatRoom.getChatRoom();
+                    return new ChatRoomListResponse(chatRoom.getId(), chatRoom.getName());
+                })
                 .collect(Collectors.toList());
     }
+
 }
 

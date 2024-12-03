@@ -22,7 +22,7 @@ public class WebSocketController {
     @SendTo("/sub/chat.{roomId}")      // 이 주소를 구독한 사용자에게 전달
     public String message(
             ChatMessage chatMessage,
-            @DestinationVariable String roomId,
+            @DestinationVariable Long roomId,
             @Header("Authorization") String token
     ) {
         chatService.saveChatMessage(chatMessage, roomId, token);

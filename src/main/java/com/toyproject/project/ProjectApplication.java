@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableMongoAuditing
-@EnableMongoRepositories(basePackages = "com.toyproject.project.domain.chat")
+@EnableMongoRepositories(basePackages = "com.toyproject.project.domain.chat.repository.mongo")
 public class ProjectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectApplication.class, args);

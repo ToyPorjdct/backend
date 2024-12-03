@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class ChatResponse {
-    private String roomId;
+    private String chatId;
     private String message;
     private AuthorResponseDto author;
     private String createdAt;

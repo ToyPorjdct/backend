@@ -45,7 +45,7 @@ public class ChatController {
     @GetMapping("/{roomId}")
     @Operation(summary = "채팅방 이전 내역 조회")
     public ResponseEntity<ApiResponse<List<ChatResponse>>> getChatRoom(
-            @PathVariable String roomId) {
+            @PathVariable Long roomId) {
         return ApiResponse.success(chatService.getChatListByRoom(roomId),"success");
     }
 }

@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 public class ChatRoomRequest {
     private String name;
-    private Long member;
+    private Long otherMemberId;
 }
