@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class AuthorResponseDto {
+    private Long id;
     private String nickname;
     private String profileImage;
 }

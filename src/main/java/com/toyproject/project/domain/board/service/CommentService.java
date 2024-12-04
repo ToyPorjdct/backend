@@ -52,10 +52,11 @@ public class CommentService {
                         .commentId(comment.getId())
                         .content(comment.getContent())
                         .createdAt(comment.getCreatedAt())
-                        .author(AuthorResponseDto.builder()
-                                .nickname(comment.getMember().getNickname())
-                                .profileImage(comment.getMember().getProfileImage())
-                                .build())
+                        .author(new AuthorResponseDto(
+                                comment.getMember().getId(),
+                                comment.getMember().getNickname(),
+                                comment.getMember().getProfileImage()
+                        ))
                         .build())
                 .collect(Collectors.toList());
 

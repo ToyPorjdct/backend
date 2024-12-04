@@ -76,9 +76,10 @@ public class ChatService {
                 .map(chat -> {
                     AuthorResponseDto author = memberRepository.findById(chat.getSender())
                             .map(member -> new AuthorResponseDto(
+                                    member.getId(),
                                     member.getNickname(),
                                     member.getProfileImage()))
-                            .orElse(new AuthorResponseDto("Unknown", ""));
+                            .orElseThrow();
 
                     return ChatResponse.builder()
                             .chatId(chat.getId())

@@ -83,6 +83,7 @@ public class LikesService {
                             .likes(board.getLikesCount())
                             .tags(tagListList)
                             .author(new AuthorResponseDto(
+                                    board.getMember().getId(),
                                     board.getMember().getNickname(),
                                     board.getMember().getProfileImage()))
                             .build();

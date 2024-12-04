@@ -102,6 +102,7 @@ public class BoardService {
                 .collect(Collectors.toList());
 
         AuthorResponseDto author = new AuthorResponseDto(
+                board.getMember().getId(),
                 board.getMember().getNickname(),
                 board.getMember().getProfileImage()
         );
@@ -147,6 +148,7 @@ public class BoardService {
                             .likes(board.getLikesCount())
                             .tags(tagListList)
                             .author(new AuthorResponseDto(
+                                    board.getMember().getId(),
                                     board.getMember().getNickname(),
                                     board.getMember().getProfileImage())
                             )
