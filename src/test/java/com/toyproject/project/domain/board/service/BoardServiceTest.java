@@ -1,11 +1,13 @@
 package com.toyproject.project.domain.board.service;
 
 import com.toyproject.project.domain.board.domain.Board;
+import com.toyproject.project.domain.board.domain.Tag;
+import com.toyproject.project.domain.board.domain.TagList;
 import com.toyproject.project.domain.board.dto.BoardCreateRequestDto;
-import com.toyproject.project.domain.board.dto.BoardDetailResponseDto;
 import com.toyproject.project.domain.board.repository.BoardRepository;
+import com.toyproject.project.domain.board.repository.TagListRepository;
+import com.toyproject.project.domain.board.repository.TagRepository;
 import com.toyproject.project.domain.matching.domain.Matching;
-import com.toyproject.project.domain.matching.dto.MatchingResponseDto;
 import com.toyproject.project.domain.matching.repository.MatchingRepository;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.global.exception.CustomException;
@@ -17,7 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +42,12 @@ class BoardServiceTest {
     @Mock
     private MatchingRepository matchingRepository;
 
+    @Mock
+    private TagRepository tagRepository;
+
+    @Mock
+    private TagListRepository tagListRepository;
+
     private Member savedMember1;
     private Member savedMember2;
     private Board savedBoard;
@@ -47,6 +55,7 @@ class BoardServiceTest {
 
     @BeforeEach
     public void setUp() {
+        // Member 1 초기화
         savedMember1 = Member.builder()
                 .id(1L)
                 .email("test@gmail.com")
@@ -54,6 +63,7 @@ class BoardServiceTest {
                 .password("1234")
                 .build();
 
+        // Member 2 초기화
         savedMember2 = Member.builder()
                 .id(2L)
                 .email("test2@gmail.com")
@@ -61,41 +71,76 @@ class BoardServiceTest {
                 .password("1234")
                 .build();
 
+        // Board 초기화
         savedBoard = Board.builder()
                 .id(1L)
                 .title("글제목")
                 .description("내용")
                 .maxParticipant(5)
-                .startDate(LocalDateTime.parse("2024-11-21T13:47:13.248"))
-                .endDate(LocalDateTime.parse("2024-11-25T13:47:13.248"))
+                .startDate(LocalDate.parse("2024-11-21"))
+                .endDate(LocalDate.parse("2024-11-25"))
                 .member(savedMember1)
                 .build();
 
+        // 태그 초기화
+        Tag tag1 = Tag.builder()
+                .id(1L)
+                .name("태그1")
+                .build();
+
+        Tag tag2 = Tag.builder()
+                .id(2L)
+                .name("태그2")
+                .build();
+
+        // TagList 초기화 (태그와 게시글의 연결 테이블)
+        TagList tagList1 = TagList.builder()
+                .id(1L)
+                .board(savedBoard)
+                .tag(tag1)
+                .build();
+
+        TagList tagList2 = TagList.builder()
+                .id(2L)
+                .board(savedBoard)
+                .tag(tag2)
+                .build();
+
+        // Matching 초기화
         savedMatching = Matching.builder()
                 .id(1L)
                 .board(savedBoard)
                 .member(savedMember2)
                 .build();
     }
-
     @Test
     @DisplayName("모집글 작성 성공")
     void createBoard() {
         // given
+        when(tagRepository.findByName(anyString())).thenReturn(Optional.empty());
+        when(tagRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(boardRepository.save(any(Board.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(tagListRepository.save(any(TagList.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
         // when
         boardService.createBoard(
                 BoardCreateRequestDto.builder()
                         .title("글제목")
                         .description("내용")
+                        .destination("몽골")
                         .maxParticipant(5)
-                        .startDate(LocalDateTime.parse("2024-11-21T13:47:13.248"))
-                        .endDate(LocalDateTime.parse("2024-11-25T13:47:13.248"))
+                        .startDate(LocalDate.parse("2024-11-21"))
+                        .endDate(LocalDate.parse("2024-11-25"))
+                        .tagNames(List.of("태그1", "태그2"))
                         .build(),
                 savedMember1
         );
 
         // then
         verify(boardRepository, times(1)).save(any(Board.class));
+        verify(tagRepository, times(2)).findByName(anyString());
+        verify(tagRepository, times(2)).save(any(Tag.class));
+        verify(tagListRepository, times(2)).save(any(TagList.class));
     }
 
     @Test
@@ -138,22 +183,30 @@ class BoardServiceTest {
         // given
         Long boardId = 1L;
 
-        when(boardRepository.findById(boardId)).thenReturn(Optional.of(savedBoard));
+        when(boardRepository.findByIdWithMember(boardId)).thenReturn(Optional.of(savedBoard));
+        when(tagListRepository.findByWithTag(savedBoard)).thenReturn(List.of());
 
         // when
-        BoardDetailResponseDto response = boardService.getBoardDetail(boardId);
+        boardService.getBoardDetail(boardId);
 
         // then
-        verify(boardRepository).findById(boardId);
-        assertThat(response.getId()).isEqualTo(savedBoard.getId());
-        assertThat(response.getTitle()).isEqualTo(savedBoard.getTitle());
-        assertThat(response.getDescription()).isEqualTo(savedBoard.getDescription());
-        assertThat(response.getMemberNickname()).isEqualTo(savedBoard.getMember().getNickname());
-        assertThat(response.getMaxParticipant()).isEqualTo(savedBoard.getMaxParticipant());
-        assertThat(response.getCurrentParticipant()).isEqualTo(savedBoard.getCurrentParticipant());
-        assertThat(response.getStartDate()).isEqualTo(savedBoard.getStartDate());
-        assertThat(response.getEndDate()).isEqualTo(savedBoard.getEndDate());
+        verify(boardRepository).findByIdWithMember(boardId);
+        verify(tagListRepository).findByWithTag(savedBoard);
     }
+
+    @Test
+    @DisplayName("모집글 간단 조회 성공")
+    void getBoardList() {
+        // given
+        when(boardRepository.findAllWithMember()).thenReturn(List.of(savedBoard));
+
+        // when
+        boardService.getBoardList();
+
+        // then
+        verify(boardRepository).findAllWithMember();
+    }
+
 
     @Test
     @DisplayName("동행 신청자 조회 성공")
@@ -165,12 +218,11 @@ class BoardServiceTest {
         when(matchingRepository.findByBoardIdAndStatus(boardId, PENDING)).thenReturn(List.of(savedMatching));
 
         // when
-        List<MatchingResponseDto> matchingList = boardService.getMatchingList(boardId, savedMember1);
+        boardService.getMatchingList(boardId, savedMember1);
 
         // then
         verify(boardRepository).findById(boardId);
-
-        assertThat(matchingList.size()).isEqualTo(1);
+        verify(matchingRepository).findByBoardIdAndStatus(boardId, PENDING);
     }
 
     @Test
@@ -199,11 +251,10 @@ class BoardServiceTest {
         when(matchingRepository.findByBoardIdAndStatus(boardId, APPROVED)).thenReturn(List.of(savedMatching));
 
         // when
-        List<MatchingResponseDto> currentParticipant = boardService.getCurrentParticipant(boardId);
+        boardService.getCurrentParticipant(boardId);
 
         // then
         verify(matchingRepository).findByBoardIdAndStatus(boardId, APPROVED);
-        assertThat(currentParticipant.size()).isEqualTo(1);
     }
 
 

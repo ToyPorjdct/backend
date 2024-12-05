@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -59,8 +60,8 @@ class BoardControllerTest {
                 .title("title")
                 .description("direction")
                 .maxParticipant(10)
-                .startDate(LocalDateTime.parse("2024-11-21T13:47:13.248"))
-                .endDate(LocalDateTime.parse("2024-11-25T13:47:13.248"))
+                .startDate(LocalDate.parse("2024-11-21T13:47:13.248"))
+                .endDate(LocalDate.parse("2024-11-25T13:47:13.248"))
                 .member(savedMember1)
                 .build();
     }
@@ -75,8 +76,8 @@ class BoardControllerTest {
                 .title("title")
                 .description("direction")
                 .maxParticipant(10)
-                .startDate(LocalDateTime.parse("2024-11-21T13:47:13.248"))
-                .endDate(LocalDateTime.parse("2024-11-25T13:47:13.248"))
+                .startDate(LocalDate.parse("2024-11-21T13:47:13.248"))
+                .endDate(LocalDate.parse("2024-11-25T13:47:13.248"))
                 .build();
 
         String json = mapper.writeValueAsString(boardCreateRequestDto);
@@ -114,8 +115,8 @@ class BoardControllerTest {
                 .title("Sample Title")
                 .description("Sample Description")
                 .maxParticipant(10)
-                .startDate(LocalDateTime.parse("2024-11-21T13:47:13"))
-                .endDate(LocalDateTime.parse("2024-11-25T13:47:13"))
+                .startDate(LocalDate.parse("2024-11-21T13:47:13"))
+                .endDate(LocalDate.parse("2024-11-25T13:47:13"))
                 .build();
 
         given(boardService.getBoardDetail(1L)).willReturn(boardDetailDto);
