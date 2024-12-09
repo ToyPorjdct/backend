@@ -48,8 +48,8 @@ class AuthServiceTest {
         authService.join(joinRequest);
 
         // then
-        List<Member> memberList = memberRepository.findAll();
-        assertThat(memberList.size()).isEqualTo(1);
+        Member member = memberRepository.findByEmail(joinRequest.getEmail()).get();
+        assertThat(member).isNotNull();
     }
 
     @Test
