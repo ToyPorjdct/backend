@@ -39,29 +39,23 @@ public class ChatService {
     public void createChatRoom(Member cuurentMember, ChatRoomRequest chatRoomRequest) {
         Member otherMember = memberRepository.findById(chatRoomRequest.getOtherMemberId()).orElseThrow();
 
-        chatRoomRepository.save(
+        ChatRoom savedChatRoom = chatRoomRepository.save(
                 ChatRoom.builder()
-                .name(chatRoomRequest.getName())
-                .build()
+                        .name(chatRoomRequest.getName())
+                        .build()
         );
 
         memberChatRoomRepository.save(
                 MemberChatRoom.builder()
                 .member(cuurentMember)
-                .chatRoom(
-                        ChatRoom.builder()
-                        .name(chatRoomRequest.getName())
-                        .build()
-                )
+                .chatRoom(savedChatRoom)
                 .build()
         );
 
         memberChatRoomRepository.save(
                 MemberChatRoom.builder()
                 .member(otherMember)
-                .chatRoom(ChatRoom.builder()
-                        .name(chatRoomRequest.getName())
-                        .build())
+                .chatRoom(savedChatRoom)
                 .build()
         );
     }
