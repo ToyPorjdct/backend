@@ -1,6 +1,7 @@
 package com.toyproject.project.domain.chat.contorller;
 
 import com.toyproject.project.domain.chat.dto.ChatMessage;
+import com.toyproject.project.domain.chat.dto.ChatResponse;
 import com.toyproject.project.domain.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +21,11 @@ public class WebSocketController {
 
     @MessageMapping("/chat.{roomId}")  // /pub/chat 주소로 발행된 메시지를
     @SendTo("/sub/chat.{roomId}")      // 이 주소를 구독한 사용자에게 전달
-    public String message(
+    public ChatResponse message(
             ChatMessage chatMessage,
             @DestinationVariable Long roomId,
             @Header("Authorization") String token
     ) {
-        chatService.saveChatMessage(chatMessage, roomId, token);
-        return "success";
+        return chatService.saveChatMessage(chatMessage, roomId, token);
     }
 }

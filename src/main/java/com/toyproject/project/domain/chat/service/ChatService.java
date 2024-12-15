@@ -79,7 +79,7 @@ public class ChatService {
                             .chatId(chat.getId())
                             .message(chat.getMessage())
                             .author(author)
-                            .createdAt(chat.getCreatedAt().toString())
+                            .createdAt(chat.getCreatedAt())
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -88,14 +88,23 @@ public class ChatService {
     /**
      * 채팅 메세지 저장
      */
-    public Chat saveChatMessage(ChatMessage chatMessage, Long roomId, String token) {
+    public ChatResponse saveChatMessage(ChatMessage chatMessage, Long roomId, String token) {
         Long memberId = Long.parseLong(jwtTokenProvider.getMemberId(token));
-        return chatRepository.save(
+        Member member = memberRepository.findById(memberId).orElseThrow();
+
+        Chat savedChat = chatRepository.save(
                 Chat.builder()
-                .roomId(roomId)
-                .sender(memberId)
-                .message(chatMessage.getMessage())
-                .build()
+                        .roomId(roomId)
+                        .sender(memberId)
+                        .message(chatMessage.getMessage())
+                        .build());
+
+        return ChatResponse.builder()
+                .chatId(savedChat.getId())
+                .message(savedChat.getMessage())
+                .author(new AuthorResponseDto(member.getId(), member.getNickname(), member.getProfileImage()))
+                .createdAt(savedChat.getCreatedAt())
+                .build(
         );
     }
 
