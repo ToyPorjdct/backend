@@ -1,6 +1,7 @@
 package com.toyproject.project.domain.chat.service;
 
 
+import com.toyproject.project.domain.chat.domain.Chat;
 import com.toyproject.project.domain.chat.dto.ChatMessage;
 import com.toyproject.project.domain.chat.dto.ChatRoomRequest;
 import com.toyproject.project.domain.chat.repository.ChatRoomRepository;
@@ -95,8 +96,17 @@ class ChatServiceTest {
         // given
         ChatMessage chatMessage = new ChatMessage("Hello");
 
+        Chat chat = Chat.builder()
+                .message(chatMessage.getMessage())
+                .roomId(1L)
+                .sender(savedMember1.getId())
+                .build();
+
         // when
         when(jwtTokenProvider.getMemberId("JwtToken")).thenReturn("1");
+        when(memberRepository.findById(1L)).thenReturn(java.util.Optional.of(savedMember1));
+        when(chatRepository.save(any())).thenReturn(chat);
+
         chatService.saveChatMessage( chatMessage,1L, "JwtToken");
 
 
