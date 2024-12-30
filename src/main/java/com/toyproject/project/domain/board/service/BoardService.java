@@ -81,12 +81,11 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(()
                 -> new CustomException(NOT_FOUND_BOARD));
 
-
         if(!isAuthor(member, board)){
             throw new CustomException(NO_AUTHORITY);
         }
 
-        matchingRepository.deleteByBoardId(boardId);
+        tagListRepository.deleteAllByBoard(board);
         boardRepository.delete(board);
     }
 
@@ -185,7 +184,7 @@ public class BoardService {
     }
 
     private static boolean isAuthor(Member member, Board board) {
-        return board.getMember() == member;
+        return board.getMember().equals(member);
     }
 
 }

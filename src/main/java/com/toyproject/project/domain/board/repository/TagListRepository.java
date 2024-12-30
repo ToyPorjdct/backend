@@ -19,4 +19,6 @@ public interface TagListRepository extends JpaRepository<TagList, Long> {
             WHERE t.board = :board
             """)
     List<TagList> findByWithTag(Board board);
+
+    void deleteAllByBoard(Board board);
 }
