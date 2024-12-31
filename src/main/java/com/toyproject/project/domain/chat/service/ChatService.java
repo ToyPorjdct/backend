@@ -1,7 +1,9 @@
 package com.toyproject.project.domain.chat.service;
 
 
+import com.toyproject.project.domain.board.domain.Board;
 import com.toyproject.project.domain.board.dto.AuthorResponseDto;
+import com.toyproject.project.domain.board.repository.BoardRepository;
 import com.toyproject.project.domain.chat.domain.Chat;
 import com.toyproject.project.domain.chat.domain.ChatRoom;
 import com.toyproject.project.domain.chat.domain.MemberChatRoom;
@@ -14,6 +16,8 @@ import com.toyproject.project.domain.chat.repository.mongo.ChatRepository;
 import com.toyproject.project.domain.chat.repository.ChatRoomRepository;
 import com.toyproject.project.domain.member.entity.Member;
 import com.toyproject.project.domain.member.repository.MemberRepository;
+import com.toyproject.project.global.exception.CustomException;
+import com.toyproject.project.global.exception.ErrorCode;
 import com.toyproject.project.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,18 +34,23 @@ public class ChatService {
     private final MemberChatRoomRepository memberChatRoomRepository;
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BoardRepository boardRepository;
 
 
 
     /**
      * 채팅방 생성
      */
-    public void createChatRoom(Member cuurentMember, ChatRoomRequest chatRoomRequest) {
-        Member otherMember = memberRepository.findById(chatRoomRequest.getOtherMemberId()).orElseThrow();
+    public Long createChatRoom(Member cuurentMember, ChatRoomRequest chatRoomRequest) {
+        Board board = boardRepository.findByIdWithMember(chatRoomRequest.getBoardId()).orElseThrow();
+
+        if(isMemberAlreadyInChatRoom(cuurentMember, board)) {
+            throw new CustomException(ErrorCode.ALREADY_JOIN_CHAT);
+        }
 
         ChatRoom savedChatRoom = chatRoomRepository.save(
                 ChatRoom.builder()
-                        .name(chatRoomRequest.getName())
+                        .name(board.getTitle())
                         .build()
         );
 
@@ -49,15 +58,23 @@ public class ChatService {
                 MemberChatRoom.builder()
                 .member(cuurentMember)
                 .chatRoom(savedChatRoom)
+                .boardId(board.getId())
                 .build()
         );
 
         memberChatRoomRepository.save(
                 MemberChatRoom.builder()
-                .member(otherMember)
+                .member(board.getMember())
                 .chatRoom(savedChatRoom)
+                .boardId(board.getId())
                 .build()
         );
+
+        return savedChatRoom.getId();
+    }
+
+    private Boolean isMemberAlreadyInChatRoom(Member cuurentMember, Board board) {
+        return memberChatRoomRepository.existsByMemberIdAndBoardId(cuurentMember.getId(), board.getId());
     }
 
     /**

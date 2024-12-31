@@ -28,4 +28,6 @@ public class MemberChatRoom {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
+    private Long boardId;
+
 }

@@ -17,4 +17,6 @@ public interface MemberChatRoomRepository extends JpaRepository<MemberChatRoom, 
             WHERE m.member.id = :memberId 
             """)
     List<MemberChatRoom> findByMemberId(@Param("memberId") Long memberId);
+
+    Boolean existsByMemberIdAndBoardId(Long memberId, Long boardId);
 }

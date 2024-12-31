@@ -27,11 +27,10 @@ public class ChatController {
 
     @PostMapping
     @Operation(summary = "채팅방 생성")
-    public String createChatRoom(
+    public ResponseEntity<ApiResponse<Long>> createChatRoom(
             @AuthenticationMember Member member,
             @RequestBody ChatRoomRequest chatRoomRequest) {
-        chatService.createChatRoom(member, chatRoomRequest);
-        return "success";
+        return ApiResponse.success(chatService.createChatRoom(member, chatRoomRequest), "success");
     }
 
     @GetMapping
