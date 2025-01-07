@@ -58,6 +58,15 @@ public class BoardController {
         return ApiResponse.success(boardService.getBoardList(), "모집글 전체 조회 성공");
     }
 
+    @GetMapping("/{boardId}/view")
+    @Operation(summary = "조회수 증가", description = "조회수 증가")
+    public ResponseEntity<ApiResponse<String>> boardView(
+            @PathVariable Long boardId
+    ) {
+        boardService.addView(boardId);
+        return ApiResponse.success(null, "조회수 증가 성공");
+    }
+
     @GetMapping("/{boardId}/matching")
     @Operation(summary = "매칭 신청자 조회", description = "매칭 신청자 조회")
     public ResponseEntity<ApiResponse<List<MatchingResponseDto>>> matchingList(

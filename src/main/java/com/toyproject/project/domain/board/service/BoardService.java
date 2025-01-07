@@ -157,6 +157,14 @@ public class BoardService {
     }
 
     /**
+     * 조회수 증가
+     */
+    @Transactional
+    public void addView(Long boardId) {
+        boardRepository.increaseViewCount(boardId);
+    }
+
+    /**
      * 동행 신청자 조회
      */
     public List<MatchingResponseDto> getMatchingList(Long boardId, Member member) {
@@ -186,5 +194,6 @@ public class BoardService {
     private static boolean isAuthor(Member member, Board board) {
         return board.getMember().equals(member);
     }
+
 
 }
