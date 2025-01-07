@@ -41,10 +41,14 @@ public class ChatService {
     /**
      * 채팅방 생성
      */
-    public Long createChatRoom(Member cuurentMember, ChatRoomRequest chatRoomRequest) {
+    public Long createChatRoom(Member currentMember, ChatRoomRequest chatRoomRequest) {
         Board board = boardRepository.findByIdWithMember(chatRoomRequest.getBoardId()).orElseThrow();
 
-        if(isMemberAlreadyInChatRoom(cuurentMember, board)) {
+        if (currentMember.equals(board.getMember())) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        if(isMemberAlreadyInChatRoom(currentMember, board)) {
             throw new CustomException(ErrorCode.ALREADY_JOIN_CHAT);
         }
 
@@ -56,7 +60,7 @@ public class ChatService {
 
         memberChatRoomRepository.save(
                 MemberChatRoom.builder()
-                .member(cuurentMember)
+                .member(currentMember)
                 .chatRoom(savedChatRoom)
                 .boardId(board.getId())
                 .build()
