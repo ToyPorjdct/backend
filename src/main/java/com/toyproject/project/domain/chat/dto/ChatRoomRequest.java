@@ -10,5 +10,4 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatRoomRequest {
     private Long boardId;
-    private Long otherMemberId;
 }
