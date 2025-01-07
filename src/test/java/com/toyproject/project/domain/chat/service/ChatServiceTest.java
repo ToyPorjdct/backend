@@ -66,7 +66,7 @@ class ChatServiceTest {
     @DisplayName("채팅방 생성")
     void createChatRoom() {
         // given
-        ChatRoomRequest chatRoomRequest = new ChatRoomRequest("1:1 Chat", 2L);
+        ChatRoomRequest chatRoomRequest = new ChatRoomRequest( 2L);
         when(memberRepository.findById(any())).thenReturn(java.util.Optional.of(savedMember2));
 
         // when

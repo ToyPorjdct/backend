@@ -1,6 +1,7 @@
 package com.toyproject.project.domain.chat.contorller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toyproject.project.domain.board.domain.Board;
 import com.toyproject.project.domain.board.dto.AuthorResponseDto;
 import com.toyproject.project.domain.chat.dto.ChatResponse;
 import com.toyproject.project.domain.chat.dto.ChatRoomListResponse;
@@ -41,7 +42,8 @@ class ChatControllerTest {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    private Member savedMember1;
+    private Member savedMember1, savedMember2;
+    private Board savedBoard1;
 
     @BeforeEach
     public void setUp() {
@@ -53,6 +55,20 @@ class ChatControllerTest {
                 .nickname("test")
                 .password("1234")
                 .build();
+
+        savedMember2 = Member.builder()
+                .id(2L)
+                .email("test2@gmail.com")
+                .nickname("test2")
+                .password("1234")
+                .build();
+
+        savedBoard1 = Board.builder()
+                .id(1L)
+                .title("Board1")
+                .description("Board1 Description")
+                .member(savedMember1)
+                .build();
     }
 
 
@@ -60,7 +76,7 @@ class ChatControllerTest {
     @DisplayName("채팅방 생성")
     void createChatRoom() throws Exception {
         // given
-        ChatRoomRequest chatRoomRequest = new ChatRoomRequest("ChatRoom1", 1L);
+        ChatRoomRequest chatRoomRequest = new ChatRoomRequest(1L);
 
         String json = mapper.writeValueAsString(chatRoomRequest);
 
